@@ -43,8 +43,8 @@ export const Navbar: React.FC = () => {
   return (
     <>
       {/* Top corporate bar */}
-      <div className="bg-slate-900 text-slate-300 text-[11px] py-1.5 px-4 border-b border-slate-800 hidden md:block">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
+      <div className="snap-top bg-teal-950 text-slate-300 text-xs py-2 px-4 border-b border-teal-900 hidden md:block">
+        <div className="max-w-[1720px] mx-auto px-4 sm:px-8 lg:px-14 xl:px-20 flex items-center justify-between">
           <div className="flex items-center gap-6">
             <span className="flex items-center gap-1.5 text-slate-400">
               <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -81,13 +81,13 @@ export const Navbar: React.FC = () => {
 
       {/* Main sticky navigation */}
       <header
-        className={`sticky top-0 z-40 w-full transition-all duration-300 ${
+        className={`sticky top-0 z-40 w-full transition-shadow duration-300 ${
           isScrolled
-            ? 'bg-white/95 backdrop-blur-md shadow-md py-2.5 border-b border-slate-200'
-            : 'bg-white py-3.5 border-b border-slate-100'
+            ? 'bg-white/95 backdrop-blur-md shadow-md border-b border-slate-200'
+            : 'bg-white border-b border-slate-100'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+        <div className="h-[var(--header-h)] max-w-[1720px] mx-auto px-4 sm:px-8 lg:px-14 xl:px-20 flex items-center justify-between">
           {/* Authentic Logo */}
           <Link href="/" className="flex items-center gap-3 shrink-0">
             <div className="relative w-44 h-11">
@@ -302,7 +302,7 @@ export const Navbar: React.FC = () => {
               variant="teal"
               size="sm"
               onClick={() => setIsRfqOpen(true)}
-              className="font-semibold shadow-xs"
+              className="hidden font-semibold shadow-xs sm:inline-flex"
             >
               {t('Request a Quote', 'طلب تسعير')}
             </Button>

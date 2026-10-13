@@ -7,13 +7,17 @@ export const siteConfig = {
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://deltachem.com.eg',
   contact: {
     address: '66 Gamal El-Deen Zaki st, Gesr El-Suez, Cairo, Egypt',
+    address_ar: '٦٦ شارع جمال الدين زكي، جسر السويس، القاهرة، مصر',
     phone: '(202) 26988187',
     phoneClean: '+20226988187',
     email: 'sales@deltachem.com.eg',
     salesEmail: 'sales@deltachem.com.eg',
     hours: 'Sunday - Thursday: 9:00 AM - 5:00 PM (GMT+2)',
+    hours_ar: 'الأحد - الخميس: ٩:٠٠ ص - ٥:٠٠ م (توقيت القاهرة)',
     workingHours: 'Sunday - Thursday: 9:00 AM - 5:00 PM (Cairo Time)',
+    workingHours_ar: 'الأحد - الخميس: ٩:٠٠ ص - ٥:٠٠ م (توقيت القاهرة)',
     warehousePartner: 'Harvest Pharma Logistics (Cairo)',
+    warehousePartner_ar: 'لوجستيات هارفست فارما (القاهرة)',
     warehouseUrl: 'https://www.harvestpharma-eg.com',
   },
   socials: {

@@ -21,8 +21,8 @@ export const Footer: React.FC = () => {
   const { t } = useLanguage();
 
   return (
-    <footer className="bg-slate-950 text-slate-300 border-t border-slate-900 pt-16 pb-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <footer className="snap-bottom bg-slate-950 text-slate-300 border-t border-teal-900 pt-16 pb-8">
+      <div className="max-w-[1720px] mx-auto px-4 sm:px-8 lg:px-14 xl:px-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-800">
           {/* Brand & Mission column */}
           <div className="lg:col-span-2 space-y-4">
@@ -173,7 +173,7 @@ export const Footer: React.FC = () => {
             <ul className="space-y-2.5 text-xs text-slate-400">
               <li className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-teal-400 shrink-0 mt-0.5" />
-                <span>{siteConfig.contact.address}</span>
+                <span>{t(siteConfig.contact.address, siteConfig.contact.address_ar)}</span>
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-teal-400 shrink-0" />
@@ -195,7 +195,7 @@ export const Footer: React.FC = () => {
               </li>
               <li className="flex items-start gap-2">
                 <Clock className="w-4 h-4 text-teal-400 shrink-0 mt-0.5" />
-                <span>{siteConfig.contact.hours}</span>
+                <span>{t(siteConfig.contact.hours, siteConfig.contact.hours_ar)}</span>
               </li>
               <li className="pt-2">
                 <a
@@ -205,7 +205,7 @@ export const Footer: React.FC = () => {
                   className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-300 hover:text-white transition p-2 bg-slate-900 rounded-md border border-slate-800"
                 >
                   <Linkedin className="w-4 h-4 text-sky-400" />
-                  <span>DELTACHEM Official LinkedIn</span>
+                  <span>{t('DELTACHEM Official LinkedIn', 'صفحة دلتا كيم الرسمية على لينكد إن')}</span>
                 </a>
               </li>
             </ul>
@@ -215,7 +215,10 @@ export const Footer: React.FC = () => {
         {/* Bottom copyright & admin access */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
           <p>
-            &copy; 2026 DELTACHEM Company. All rights reserved. Sourced & distributed under formal pharmaceutical compliance.
+            {t(
+              '© 2026 DELTACHEM Company. All rights reserved. Sourced & distributed under formal pharmaceutical compliance.',
+              '© ٢٠٢٦ شركة دلتا كيم للمنتجات الدوائية وعلوم الحياة. جميع الحقوق محفوظة. توريد وتوزيع خاضع للامتثال الصيدلاني الكامل.'
+            )}
           </p>
           <div className="flex items-center gap-4">
             <Link href="/contact" className="hover:text-slate-400 transition">

@@ -150,7 +150,7 @@ export const RfqModal: React.FC<RfqModalProps> = ({ isOpen, onClose, prefilledPr
                   </label>
                   <Input
                     {...register('product_name')}
-                    placeholder="e.g. Amoxicillin Trihydrate, Microcrystalline Cellulose"
+                    placeholder={t('e.g. Amoxicillin Trihydrate, Microcrystalline Cellulose', 'مثال: أموكسيسيلين، سليلوز دقيق التبلور')}
                     error={errors.product_name?.message}
                     leftIcon={<Package className="w-4 h-4" />}
                   />
@@ -163,7 +163,7 @@ export const RfqModal: React.FC<RfqModalProps> = ({ isOpen, onClose, prefilledPr
                   </label>
                   <Input
                     {...register('company_name')}
-                    placeholder="e.g. EVA Pharma, Sedico, Medical Union"
+                    placeholder={t('e.g. EVA Pharma, Sedico, Medical Union', 'مثال: إيفا فارما، سيديكو، المهن الطبية')}
                     error={errors.company_name?.message}
                     leftIcon={<Building2 className="w-4 h-4" />}
                   />
@@ -176,7 +176,7 @@ export const RfqModal: React.FC<RfqModalProps> = ({ isOpen, onClose, prefilledPr
                   </label>
                   <Input
                     {...register('contact_person')}
-                    placeholder="e.g. Dr. Ahmed Hassan"
+                    placeholder={t('e.g. Dr. Ahmed Hassan', 'مثال: د. أحمد حسن')}
                     error={errors.contact_person?.message}
                     leftIcon={<User className="w-4 h-4" />}
                   />
@@ -190,7 +190,7 @@ export const RfqModal: React.FC<RfqModalProps> = ({ isOpen, onClose, prefilledPr
                   <Input
                     type="email"
                     {...register('email')}
-                    placeholder="procurement@company.com"
+                    placeholder={t('procurement@company.com', 'procurement@company.com')}
                     error={errors.email?.message}
                     leftIcon={<Mail className="w-4 h-4" />}
                   />
@@ -203,7 +203,7 @@ export const RfqModal: React.FC<RfqModalProps> = ({ isOpen, onClose, prefilledPr
                   </label>
                   <Input
                     {...register('phone')}
-                    placeholder="+20 100 000 0000"
+                    placeholder={t('+20 100 000 0000', '+20 100 000 0000')}
                     error={errors.phone?.message}
                     leftIcon={<Phone className="w-4 h-4" />}
                   />
@@ -216,7 +216,7 @@ export const RfqModal: React.FC<RfqModalProps> = ({ isOpen, onClose, prefilledPr
                   </label>
                   <Input
                     {...register('required_quantity')}
-                    placeholder="e.g. 500 kg, 2 drums, 1 metric ton"
+                    placeholder={t('e.g. 500 kg, 2 drums, 1 metric ton', 'مثال: ٥٠٠ كجم، برميلين، ١ طن متري')}
                     error={errors.required_quantity?.message}
                   />
                   <p className="text-[11px] text-slate-500 mt-1">
@@ -231,7 +231,7 @@ export const RfqModal: React.FC<RfqModalProps> = ({ isOpen, onClose, prefilledPr
                   </label>
                   <Input
                     {...register('grade_spec')}
-                    placeholder="e.g. USP, BP, EP, DC grade"
+                    placeholder={t('e.g. USP, BP, EP, DC grade', 'مثال: USP, BP, EP أو درجة كبس مباشر')}
                     error={errors.grade_spec?.message}
                   />
                 </div>
@@ -243,7 +243,7 @@ export const RfqModal: React.FC<RfqModalProps> = ({ isOpen, onClose, prefilledPr
                   </label>
                   <Input
                     {...register('application')}
-                    placeholder="e.g. Solid oral dose, Topical, Injectable"
+                    placeholder={t('e.g. Solid oral dose, Topical, Injectable', 'مثال: أقراص صلبة، مستحضرات موضعية، حقن')}
                     error={errors.application?.message}
                   />
                 </div>
@@ -269,7 +269,10 @@ export const RfqModal: React.FC<RfqModalProps> = ({ isOpen, onClose, prefilledPr
                 <Textarea
                   {...register('additional_comments')}
                   rows={3}
-                  placeholder="Mention any specific documentation requirements (COA, DMF, GMP certificate, stability study)..."
+                  placeholder={t(
+                    'Mention any specific documentation requirements (COA, DMF, GMP certificate, stability study)...',
+                    'اذكر أي متطلبات توثيق خاصة (شهادة تحليل COA، ملف DMF، شهادة GMP، دراسات ثبات)...'
+                  )}
                   error={errors.additional_comments?.message}
                 />
               </div>

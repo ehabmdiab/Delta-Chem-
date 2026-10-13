@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
+import Link from 'next/link';
 import { Product, Category } from '@/types';
 import { ProductCard } from '@/components/molecules/ProductCard';
 import { Button } from '@/components/atoms/Button';
@@ -199,11 +200,11 @@ export const ProductFilterPanel: React.FC<ProductFilterPanelProps> = ({
             <Button variant="outline" size="sm" onClick={handleReset}>
               {t('Reset Filters', 'إعادة ضبط البحث')}
             </Button>
-            <a href="/contact">
+            <Link href="/contact">
               <Button variant="teal" size="sm">
                 {t('Contact Sourcing Team', 'تواصل مع فريق التوريد')}
               </Button>
-            </a>
+            </Link>
           </div>
         </div>
       )}

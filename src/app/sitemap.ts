@@ -2,6 +2,8 @@ import { MetadataRoute } from 'next';
 import { dataStore } from '@/lib/data/store';
 import { siteConfig } from '@/config/site';
 
+export const dynamic = 'force-static';
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = siteConfig.url;
 

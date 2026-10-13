@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DELTACHEM — Enterprise B2B Life Science Ingredients
 
-## Getting Started
+Premier B2B pharmaceutical, nutraceutical, veterinary, and cosmeceutical raw materials distributor in Egypt and the MENA region.
 
-First, run the development server:
+## Highlights
+
+- **Cinematic Awwward-Style Preloader**: Custom GSAP preloader featuring molecular particle canvas simulation, authentic DELTACHEM brand logo progressive reveal with dynamic scanline, real readiness detection, and smooth 5-column curtain transition.
+- **Bilingual & Bi-directional**: Full English and Arabic (RTL) localization across all pages, navigation, catalog, and status telemetry.
+- **Product Catalog & Sourcing Models**: Searchable directory of Active Pharmaceutical Ingredients (APIs), excipients, nutraceuticals, veterinary APIs, and cosmetic actives with dual sourcing model support (Indent vs. Local Ex-Warehouse).
+- **Modern Responsive Design**: Built with Next.js 16, Tailwind CSS v4, GSAP, and Framer Motion.
+
+## Development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+# Install dependencies
+pnpm install
+
+# Run development server
 pnpm dev
-# or
-bun dev
+
+# Run unit and component test suite
+pnpm test
+
+# Type checking & linting
+npx tsc --noEmit
+pnpm lint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## GitHub Pages Deployment
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The public website is statically exported and configured for deployment on GitHub Pages at:
+**[https://ehabmdiab.github.io/Delta-Chem-/](https://ehabmdiab.github.io/Delta-Chem-/)**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Automated Deployment (GitHub Actions)
 
-## Learn More
+A workflow at `.github/workflows/deploy.yml` automatically builds and deploys the static export to GitHub Pages on every push to `master`.
 
-To learn more about Next.js, take a look at the following resources:
+To enable on GitHub:
+1. Go to repository **Settings** > **Pages**.
+2. Under **Build and deployment** > **Source**, choose **GitHub Actions** (or **Deploy from a branch** -> `gh-pages`).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Local Static Export Build
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+NEXT_PUBLIC_BASE_PATH=/Delta-Chem- ./scripts/build-pages.sh
+```
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+> **Note on Static Hosting vs Full Server**:
+> GitHub Pages serves the complete public website including the catalog, divisions, responsive layouts, bilingual switcher, and animated preloader. Full server-side features like the authenticated Admin CMS (`/admin`) and dynamic email notifications (`/api/rfq`) require a Node.js/Vercel server with database credentials.

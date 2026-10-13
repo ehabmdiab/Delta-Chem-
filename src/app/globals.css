@@ -1,26 +1,228 @@
 @import "tailwindcss";
 
+/*
+ * DELTACHEM design system
+ * -----------------------------------------------------------------------
+ * Palette is blended from the two reference sites:
+ *   - arshinepharma.com : forest #126537, lime #90C31F, orange #FF6600, charcoal #3E424C
+ *   - deltachem.com.eg  : green #018F47, lime tint #F5FBEC, navy #2E4B83, deep navy #102039
+ *
+ * Rather than rewriting every component, the Tailwind hue ramps used across the
+ * codebase are remapped to semantic brand ramps so every page updates together:
+ *   teal    -> brand green  (lime 400 -> green 500 -> forest 700-950)
+ *   slate   -> forest-tinted neutrals (light surfaces + deep forest darks)
+ *   sky / blue / indigo -> navy secondary
+ *   emerald -> lime-green (success / live states)
+ *   amber / rose-ish -> ember orange (Arshine highlight)
+ */
+
 :root {
+  --header-h: 72px;
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #0f1f18;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-body), system-ui, sans-serif;
+  --font-display: var(--font-heading), var(--font-body), system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@theme {
+  /* Wider desktop container (matches the large Arshine layout) */
+  --container-7xl: 107.5rem;
+
+  /* Larger base type scale - fixes the "small text" complaint site-wide */
+  --text-xs: 0.8125rem;
+  --text-xs--line-height: 1.25rem;
+  --text-sm: 0.9375rem;
+  --text-sm--line-height: 1.5rem;
+
+  /* Brand green: lime -> green -> forest */
+  --color-teal-50: #f5fbec;
+  --color-teal-100: #e8f5d2;
+  --color-teal-200: #d0eba6;
+  --color-teal-300: #b2dc6b;
+  --color-teal-400: #90c31f;
+  --color-teal-500: #018f47;
+  --color-teal-600: #0b7a3b;
+  --color-teal-700: #126537;
+  --color-teal-800: #0e4e2b;
+  --color-teal-900: #0a3a21;
+  --color-teal-950: #06281a;
+
+  /* Forest-tinted neutrals */
+  --color-slate-50: #f7f9f4;
+  --color-slate-100: #eff3ea;
+  --color-slate-200: #e0e7d9;
+  --color-slate-300: #c9d3c0;
+  --color-slate-400: #98a590;
+  --color-slate-500: #6a7665;
+  --color-slate-600: #4f5a4b;
+  --color-slate-700: #3b453b;
+  --color-slate-800: #1f2e27;
+  --color-slate-900: #0f1f18;
+  --color-slate-950: #07150f;
+
+  /* Navy secondary (DELTACHEM) */
+  --color-sky-50: #f0f4fa;
+  --color-sky-100: #dde6f3;
+  --color-sky-200: #bdcde6;
+  --color-sky-300: #93add3;
+  --color-sky-400: #6288bf;
+  --color-sky-500: #416aa8;
+  --color-sky-600: #2e4b83;
+  --color-sky-700: #263e6c;
+  --color-sky-800: #1e3156;
+  --color-sky-900: #172644;
+  --color-sky-950: #102039;
+  --color-blue-50: #f0f4fa;
+  --color-blue-100: #dde6f3;
+  --color-blue-200: #bdcde6;
+  --color-blue-300: #93add3;
+  --color-blue-400: #6288bf;
+  --color-blue-500: #416aa8;
+  --color-blue-600: #2e4b83;
+  --color-blue-700: #263e6c;
+  --color-blue-800: #1e3156;
+  --color-blue-900: #172644;
+  --color-blue-950: #102039;
+  --color-indigo-50: #f0f4fa;
+  --color-indigo-100: #dde6f3;
+  --color-indigo-200: #bdcde6;
+  --color-indigo-300: #93add3;
+  --color-indigo-400: #7f9fd0;
+  --color-indigo-500: #416aa8;
+  --color-indigo-600: #2e4b83;
+  --color-indigo-700: #263e6c;
+  --color-indigo-800: #1e3156;
+  --color-indigo-900: #172644;
+  --color-indigo-950: #102039;
+
+  /* Lime-green (success / live) */
+  --color-emerald-50: #f7fce8;
+  --color-emerald-100: #ecf8c9;
+  --color-emerald-200: #d9f093;
+  --color-emerald-300: #c2e35a;
+  --color-emerald-400: #a9d12a;
+  --color-emerald-500: #8cb817;
+  --color-emerald-600: #5f8a0c;
+  --color-emerald-700: #4a6d0e;
+  --color-emerald-800: #3c5811;
+  --color-emerald-900: #324a13;
+  --color-emerald-950: #1a2a06;
+
+  /* Ember orange (Arshine highlight) */
+  --color-amber-50: #fff4eb;
+  --color-amber-100: #ffe5d1;
+  --color-amber-200: #ffcba3;
+  --color-amber-300: #ffa96b;
+  --color-amber-400: #ff8533;
+  --color-amber-500: #ff6600;
+  --color-amber-600: #d95700;
+  --color-amber-700: #b04600;
+  --color-amber-800: #8a3800;
+  --color-amber-900: #6b2d00;
+  --color-amber-950: #3d1900;
+  --color-rose-400: #ff8533;
+  --color-rose-500: #ff6600;
+  --color-rose-600: #d95700;
+  --color-rose-700: #b04600;
+}
+
+html {
+  /* 16px on laptops, scaling to ~18px on large desktops */
+  font-size: clamp(16px, 0.5vw + 8.5px, 19px);
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  text-wrap: balance;
+}
+
+/* ---------------------------------------------------------------------
+ * Utilities
+ * ------------------------------------------------------------------- */
+.scrollbar-none {
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-teal-400);
+  outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------------
+ * Full-page section carousel (Arshine style)
+ * Enabled by <SnapMode /> which toggles `snap-root` on <html>.
+ * Each top-level <section> inside <main> becomes one full screen "slide".
+ * ------------------------------------------------------------------- */
+html.snap-root {
+  scroll-snap-type: y proximity;
+  scroll-padding-top: var(--header-h);
+}
+
+@media (min-width: 1024px) and (min-height: 600px) {
+  html.snap-root {
+    scroll-snap-type: y proximity;
+  }
+}
+
+html.snap-root main section[data-snap] {
+  scroll-snap-align: start end;
+  scroll-snap-stop: normal;
+  scroll-margin-top: var(--header-h);
+  min-height: calc(100dvh - var(--header-h));
+  display: flex;
+  flex-direction: column;
+}
+
+/* Legacy pages: any plain <section> becomes a slide too */
+html.snap-root main section:not([data-snap]) {
+  scroll-snap-align: start end;
+  scroll-snap-stop: normal;
+  scroll-margin-top: var(--header-h);
+  min-height: calc(100dvh - var(--header-h));
+  display: flex;
+  flex-direction: column;
+}
+
+html.snap-root main section > :not([class*="absolute"]):not([class*="fixed"]) {
+  width: 100%;
+}
+
+/* Top bar + footer are snap stops as well so the page can fully scroll */
+.snap-top {
+  scroll-snap-align: start;
+}
+.snap-bottom {
+  scroll-snap-align: end;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
