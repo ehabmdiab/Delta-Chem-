@@ -1,0 +1,45 @@
+1:"$Sreact.fragment"
+3:"/Delta-Chem-/_next/static/chunks/0v8d69fjzmm_f.js"
+4:I[54380,["$3"],""]
+5:I[80331,["$3"],"default"]
+6:I[60405,["$3"],"default"]
+7:"/Delta-Chem-/_next/static/chunks/25k5u1pqo2kqy.js"
+8:"/Delta-Chem-/_next/static/chunks/0wataf5z506le.js"
+9:I[17184,["$3","$7","$8"],"default"]
+b:"/Delta-Chem-/_next/static/chunks/0ef1nypzq6fq9.js"
+c:"/Delta-Chem-/_next/static/chunks/2i5gx-uwwqvx7.js"
+d:"/Delta-Chem-/_next/static/chunks/0ledvtbmmk2ir.js"
+e:"/Delta-Chem-/_next/static/chunks/1qmdz1w9m1wqr.js"
+f:"/Delta-Chem-/_next/static/chunks/0sxl4w64rheap.js"
+10:"LanguageProvider"
+11:I[61890,["$3","$b","$c","$8","$d","$e","$f"],"$10"]
+12:I[32299,["$3","$b","$c","$8","$d","$e","$f"],"Preloader"]
+13:I[8523,["$3","$b","$c","$8","$d","$e","$f"],"SnapMode"]
+14:I[19328,["$3","$b","$c","$8","$d","$e","$f"],"Navbar"]
+15:I[80780,["$3","$b","$c","$8","$d","$e","$f"],"Footer"]
+19:"/Delta-Chem-/_next/static/chunks/11nnv3cbh850j.js"
+1a:"SupplyChainClient"
+1b:I[40907,["$3","$b","$c","$8","$d","$e","$f","$19"],"$1a"]
+1c:I[24849,["$3"],"OutletBoundary"]
+1d:"$Sreact.suspense"
+1f:"ViewportBoundary"
+20:I[24849,["$3"],"$1f"]
+22:"MetadataBoundary"
+23:I[24849,["$3"],"$22"]
+25:I[73425,["$3"],"default",1]
+:HL["/Delta-Chem-/_next/static/chunks/3i-wg4c0w07hh.css","style"]
+:HL["/Delta-Chem-/_next/static/chunks/3k63iydi8zbxb.css","style"]
+:HL["/Delta-Chem-/_next/static/chunks/2r9ls-e23cpb5.css","style"]
+:HL["/Delta-Chem-/_next/static/media/a343f882a40d2cc9-s.p.1sj6eobyi31rd.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/Delta-Chem-/_next/static/media/cf514f5d0007dafa-s.p.1wc2mf9hp9pav.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+2:["$","style",null,{"children":".dc-pre{display:none!important}"}]
+17:X
+18:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":[["$","$L1b",null,{}],[["$","script","script-0",{"src":"/Delta-Chem-/_next/static/chunks/11nnv3cbh850j.js","async":true,"nonce":"$undefined"}]],["$","$L1c",null,{"children":["$","$1d",null,{"name":"Next.MetadataOutlet","children":"$@1e"}]}]]}],"p":false,"v":null}}]]
+16:[["children",{"s":"supply-chain","h":512,"d":{"r":["$","$1","c",{"children":[null,["$","$L5",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$17"},"c":"$Q18"}]]
+a:[["children",{"s":"(website)","h":512,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/Delta-Chem-/_next/static/chunks/2r9ls-e23cpb5.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/Delta-Chem-/_next/static/chunks/0ef1nypzq6fq9.js","async":true,"nonce":"$undefined"}],["$","script","script-1",{"src":"/Delta-Chem-/_next/static/chunks/2i5gx-uwwqvx7.js","async":true,"nonce":"$undefined"}],["$","script","script-2",{"src":"/Delta-Chem-/_next/static/chunks/0wataf5z506le.js","async":true,"nonce":"$undefined"}],["$","script","script-3",{"src":"/Delta-Chem-/_next/static/chunks/0ledvtbmmk2ir.js","async":true,"nonce":"$undefined"}],["$","script","script-4",{"src":"/Delta-Chem-/_next/static/chunks/1qmdz1w9m1wqr.js","async":true,"nonce":"$undefined"}],["$","script","script-5",{"src":"/Delta-Chem-/_next/static/chunks/0sxl4w64rheap.js","async":true,"nonce":"$undefined"}]],["$","$L11",null,{"children":[["$","$L12",null,{}],["$","$L13",null,{"children":["$","div",null,{"className":"flex flex-col min-h-screen","children":[["$","$L14",null,{}],["$","main",null,{"className":"flex-1","children":["$","$L5",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","$L9",null,{}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]}],["$","$L15",null,{}]]}]}]]}]]}],"p":false,"v":null},"c":"$Q16"}]]
+0:{"P":null,"c":["","supply-chain",""],"q":"","i":false,"t":{"t":{"s":"","h":528,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/Delta-Chem-/_next/static/chunks/3i-wg4c0w07hh.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","link","1",{"rel":"stylesheet","href":"/Delta-Chem-/_next/static/chunks/3k63iydi8zbxb.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/Delta-Chem-/_next/static/chunks/0v8d69fjzmm_f.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","suppressHydrationWarning":true,"className":"_34gMxG_variable AB8okG_variable h-full antialiased","children":[["$","head",null,{"children":["$","noscript",null,{"children":"$2"}]}],["$","body",null,{"className":"min-h-full flex flex-col font-sans bg-slate-50 text-slate-900 selection:bg-teal-600 selection:text-white","children":[["$","$L4",null,{"id":"dc-preloader-boot","strategy":"beforeInteractive","dangerouslySetInnerHTML":{"__html":"try{if(location.search.indexOf('preloader')===-1&&sessionStorage.getItem('dc_preloader_seen')==='1'){document.documentElement.setAttribute('data-preloader','skip')}}catch(e){}"}}],["$","$L5",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","$L9",null,{}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]]}]]}]]}],"p":false,"v":null},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L20",null,{"children":"$L21"}],["$","$L23",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$1d",null,{"name":"Next.Metadata","children":"$L24"}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":false,"v":null}},"m":"$undefined","G":["$25",[["$","link","0",{"rel":"stylesheet","href":"/Delta-Chem-/_next/static/chunks/3i-wg4c0w07hh.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","link","1",{"rel":"stylesheet","href":"/Delta-Chem-/_next/static/chunks/3k63iydi8zbxb.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"C_G-5iUKChXBGSQnPOUa7"}
+17:C
+21:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","2",{"name":"theme-color","content":"#126537"}]]
+26:I[34245,["$3"],"IconMark"]
+1e:null
+24:[["$","title","0",{"children":"Supply Chain & Warehousing | Harvest Pharma Synergy | DELTACHEM"}],["$","meta","1",{"name":"description","content":"Discover DELTACHEM’s GDP-compliant pharmaceutical supply chain and climate-controlled warehousing in Cairo via sister company Harvest Pharma."}],["$","link","2",{"rel":"icon","href":"/Delta-Chem-/favicon.ico?favicon.117ezoe8m31dk.ico","sizes":"48x48","type":"image/x-icon"}],["$","$L26","3",{}]]
