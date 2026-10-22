@@ -7,4 +7,4 @@
 3:[["children",{"s":{"n":"slug","t":"d","k":"pioneering-excellence-in-the-life-science-industry","s":[]},"h":96,"c":"$Q4"}]]
 2:[["children",{"s":"insights","h":96,"c":"$Q3"}]]
 1:[["children",{"s":"(website)","h":96,"c":"$Q2"}]]
-0:{"b":"C_G-5iUKChXBGSQnPOUa7","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
+0:{"b":"50zUx-aU0FBmTEOKLdxEe","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
