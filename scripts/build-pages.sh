@@ -25,11 +25,16 @@ ln -s "$ROOT/node_modules" "$WORK/node_modules"
 rm -rf "$WORK/src/app/admin" "$WORK/src/app/api" "$WORK/tests"
 
 cd "$WORK"
-GITHUB_PAGES=true \
-NEXT_PUBLIC_BASE_PATH="${NEXT_PUBLIC_BASE_PATH:-}" \
-NEXT_PUBLIC_SITE_URL="${NEXT_PUBLIC_SITE_URL:-https://ehabmdiab.github.io/Delta-Chem-}" \
-  npx next build
+build_cmd() {
+  GITHUB_PAGES=true \
+  NEXT_PUBLIC_BASE_PATH="${NEXT_PUBLIC_BASE_PATH:-}" \
+  NEXT_PUBLIC_SITE_URL="${NEXT_PUBLIC_SITE_URL:-https://ehabmdiab.github.io/Delta-Chem-}" \
+    npx next build
+}
 
+build_cmd || build_cmd
+
+cp "$WORK/out/index.html" "$WORK/out/404.html" || true
 mv "$WORK/out" "$ROOT/out"
 touch "$ROOT/out/.nojekyll"
 cd "$ROOT"
