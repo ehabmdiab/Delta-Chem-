@@ -20,6 +20,9 @@ const nextConfig: NextConfig = {
   env: {
     NEXT_PUBLIC_BASE_PATH: basePath,
   },
+  experimental: {
+    agentUpgrade: "security",
+  },
   ...(isPages
     ? {
         output: "export" as const,
