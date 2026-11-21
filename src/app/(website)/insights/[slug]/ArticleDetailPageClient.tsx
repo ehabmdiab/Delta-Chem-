@@ -172,7 +172,7 @@ export const ArticleDetailPageClient: React.FC<ArticleDetailPageClientProps> = (
             <Link href="/request-a-quote" className="shrink-0">
               <Button className="bg-teal-600 hover:bg-teal-500 text-white font-medium">
                 {t('Request a Quote', 'طلب عرض أسعار')}
-                <ArrowRight className="ml-2 h-4 w-4 rtl:mr-2 rtl:ml-0 rtl:rotate-180" />
+                <ArrowRight className="h-4 w-4 rtl:rotate-180" />
               </Button>
             </Link>
           </div>

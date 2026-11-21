@@ -4,7 +4,7 @@ import { ContactPageClient } from './ContactPageClient';
 export const metadata: Metadata = {
   title: 'Contact DELTACHEM | Cairo Head Office & Sales Desk',
   description:
-    'Get in touch with DELTACHEM: Head office at 66 Gamal El-Deen Zaki st, Gesr El-Suez, Cairo. Tel: (202) 26988187. Email: sales@deltachem.com.eg.',
+    'Contact DELTACHEM at 64 Abdel Aziz Hegazy Street, El Togarieen, Gesr El-Suez, Cairo, Egypt. Tel: 0226988187 / 0226988217. Mobile & WhatsApp: 01003875503 / 01210110609.',
 };
 
 export default function ContactPage() {

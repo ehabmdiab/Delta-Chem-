@@ -1,353 +1,180 @@
 'use client';
 
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
-import { motion } from 'motion/react';
 import { Button } from '@/components/atoms/Button';
 import { RfqModal } from '@/components/molecules/RfqModal';
 import { SectionShell } from '@/components/molecules/SectionShell';
 import { SectionHeader } from '@/components/molecules/SectionHeader';
 import { useLanguage } from '@/components/providers/LanguageContext';
-import {
-  ChevronLeft,
-  ChevronRight,
-  Pill,
-  FlaskConical,
-  Sparkles,
-  ShieldCheck,
-  Globe2,
-  ArrowRight,
-} from 'lucide-react';
+import { Pill, ShieldCheck, Sparkles, HeartPulse, ArrowRight } from 'lucide-react';
 
-interface CarouselDivision {
+interface SectorCardData {
   id: string;
-  categoryName: string;
-  categoryNameAr: string;
+  titleEn: string;
+  titleAr: string;
   slug: string;
-  tagline: string;
-  taglineAr: string;
+  descEn: string;
+  descAr: string;
   standards: string;
-  description: string;
-  descriptionAr: string;
   Icon: React.ComponentType<{ className?: string }>;
-  chemicals: { name: string; cas: string; grade: string }[];
+  samples: { name: string; standard: string; packing: string }[];
 }
 
-const CAROUSEL_DIVISIONS: CarouselDivision[] = [
+const SECTORS: SectorCardData[] = [
   {
-    id: 'apis',
-    categoryName: 'Active Pharmaceutical Ingredients (APIs)',
-    categoryNameAr: 'المواد الفعالة الدوائية (APIs)',
-    slug: 'pharmaceutical-apis',
-    tagline: 'High-Potency & Bulk Therapeutic Actives',
-    taglineAr: 'مواد علاجية فعالة وعالية النقاوة',
-    standards: 'USP • BP • Ph.Eur',
-    description:
-      'Human active substances for antibiotic, cardiovascular, antidiabetic and analgesic dosage forms — backed by DMF files and EDA registration clearance.',
-    descriptionAr:
-      'مواد فعالة بشرية للمضادات الحيوية وأمراض القلب والسكري والمسكنات، مدعومة بملفات DMF واعتمادات هيئة الدواء.',
+    id: 'human',
+    titleEn: 'Human Pharmaceutical Raw Materials',
+    titleAr: 'الخامات البشرية',
+    slug: 'human-raw-materials',
+    descEn: 'Antibiotics, analgesics, anthelmintics, and pharmacopoeial excipients for human formulations.',
+    descAr: 'مضادات حيوية ومسكنات ومضادات ديدان وسواغات دوائية معتمدة لتصنيع الأدوية البشرية.',
+    standards: 'USP • BP • EP',
     Icon: Pill,
-    chemicals: [
-      { name: 'Amoxicillin Trihydrate', cas: '61336-70-7', grade: 'Compacted' },
-      { name: 'Metformin HCl', cas: '1115-70-4', grade: 'Direct Compression' },
-      { name: 'Paracetamol / APAP', cas: '103-90-2', grade: 'DC 90%' },
-      { name: 'Pregabalin', cas: '148553-50-8', grade: 'EP / USP' },
-    ],
-  },
-  {
-    id: 'excipients',
-    categoryName: 'Pharmaceutical Excipients',
-    categoryNameAr: 'السواغات الدوائية',
-    slug: 'pharmaceutical-excipients',
-    tagline: 'Binders, Superdisintegrants & Solubilizers',
-    taglineAr: 'روابط ومفككات فائقة ومحسنات ذوبان',
-    standards: 'Ph.Eur • USP-NF • JP',
-    description:
-      'Functional polymers and binders ensuring fast disintegration, superior tablet hardness and optimal dissolution kinetics for high-speed tableting.',
-    descriptionAr:
-      'بوليمرات وظيفية ومواد رابطة تضمن التفكك السريع وصلابة الأقراص ومعدلات ذوبان مثالية لخطوط الإنتاج السريعة.',
-    Icon: FlaskConical,
-    chemicals: [
-      { name: 'Microcrystalline Cellulose', cas: '9004-34-6', grade: 'PH-101 / 102' },
-      { name: 'Povidone (PVP)', cas: '9003-39-8', grade: 'K30 / K90' },
-      { name: 'Croscarmellose Sodium', cas: '74811-65-7', grade: 'Superdisintegrant' },
-      { name: 'Magnesium Stearate', cas: '557-04-0', grade: 'Vegetable' },
-    ],
-  },
-  {
-    id: 'nutraceuticals',
-    categoryName: 'Nutraceuticals & Dietary Actives',
-    categoryNameAr: 'المكملات الغذائية والمواد النشطة',
-    slug: 'nutraceutical-ingredients',
-    tagline: 'Vitamins, Bio-Minerals & Fortification',
-    taglineAr: 'فيتامينات ومعادن نشطة ومغذيات حيوية',
-    standards: 'USP-NF • FCC • Halal',
-    description:
-      'Bio-available raw materials for immunity tablets, effervescents and functional syrups — tested for heavy metals, microbial limits and residual solvents.',
-    descriptionAr:
-      'مواد خام عالية الامتصاص لأقراص المناعة والفوارات والشراب، مفحوصة للمعادن الثقيلة والحدود الميكروبية والمذيبات المتبقية.',
-    Icon: Sparkles,
-    chemicals: [
-      { name: 'Niacinamide (B3)', cas: '98-92-0', grade: 'Pharma / Food' },
-      { name: 'Ascorbic Acid (C)', cas: '50-81-7', grade: 'Coated & Plain' },
-      { name: 'Zinc Gluconate', cas: '4468-02-4', grade: 'High Bioavailability' },
-      { name: 'Glucosamine Sulfate', cas: '38899-05-7', grade: 'Joint Health' },
+    samples: [
+      { name: 'Amoxicillin Trihydrate', standard: 'USP / BP / EP', packing: '25KG/DRUM' },
+      { name: 'Paracetamol', standard: 'BP2010', packing: '25KG/DRUM' },
+      { name: 'Azithromycin Dihydrate', standard: 'USP35/32/26', packing: '25KG/DRUM' },
+      { name: 'MCC PH 101 / PH 200', standard: 'BP/USP/FCC/EP', packing: '25KG/DRUM or BAG' },
     ],
   },
   {
     id: 'veterinary',
-    categoryName: 'Veterinary Actives & Premixes',
-    categoryNameAr: 'المواد البيطرية والخلطات',
-    slug: 'veterinary-ingredients',
-    tagline: 'Animal Health Antibacterials & Premixes',
-    taglineAr: 'مضادات حيوية وإضافات أعلاف للثروة الحيوانية',
-    standards: 'BP(Vet) • EP Vet • cGMP',
-    description:
-      'Veterinary actives for poultry, livestock and aquaculture — broad-spectrum coverage, water solubility and feed stability.',
-    descriptionAr:
-      'مواد فعالة بيطرية للدواجن والماشية والاستزراع السمكي — كفاءة واسعة المدى وذوبانية عالية وثبات بالأعلاف.',
+    titleEn: 'Veterinary Raw Materials',
+    titleAr: 'الخامات البيطرية',
+    slug: 'veterinary-raw-materials',
+    descEn: 'Veterinary antibiotics, quinolones, sulphonamides, anthelmintics, and feed-grade vitamins.',
+    descAr: 'مضادات حيوية بيطرية وكينولون وسلفوناميدات وفيتامينات أعلاف لقطاع الصحة الحيوانية.',
+    standards: 'BPV • CPV • EP',
     Icon: ShieldCheck,
-    chemicals: [
-      { name: 'Tylosin Tartrate', cas: '1405-54-5', grade: 'Granular' },
-      { name: 'Doxycycline Hyclate', cas: '24390-14-5', grade: 'Poultry & Cattle' },
-      { name: 'Colistin Sulfate', cas: '1264-72-8', grade: 'GI Tract Active' },
-      { name: 'Ivermectin', cas: '70288-86-7', grade: 'Micronized' },
+    samples: [
+      { name: 'Tylosin Tartrate', standard: 'BPV2010', packing: '15KG/CTN or 20KG/DRUM' },
+      { name: 'Enrofloxacin Base', standard: 'CPV2010/USP34', packing: '25KG/DRUM' },
+      { name: 'Florfenicol', standard: 'CPV2010', packing: '25KG/DRUM' },
+      { name: 'Oxytetracycline Base / HCL', standard: 'BP/USP/EP', packing: '25KG/DRUM' },
     ],
   },
   {
-    id: 'cosmeceuticals',
-    categoryName: 'Cosmeceuticals & Personal Care',
-    categoryNameAr: 'مستحضرات التجميل والعناية',
-    slug: 'cosmeceuticals-ingredients',
-    tagline: 'Dermatological Bio-Actives & UV Filters',
-    taglineAr: 'مكونات جلدية نشطة وفلاتر أشعة الشمس',
-    standards: 'INCI • EP Cosmetic',
-    description:
-      'Clinically validated actives — multi-molecular-weight hyaluronic acid, brightening agents and photostable UV filters for advanced skincare.',
-    descriptionAr:
-      'خامات تجميلية معتمدة — هيالورونات الصوديوم بأوزان جزيئية متعددة، مواد تفتيح وفلاتر واقية من الشمس للعناية المتقدمة بالبشرة.',
+    id: 'cosmetics',
+    titleEn: 'Cosmetics Raw Materials',
+    titleAr: 'خامات مستحضرات التجميل',
+    slug: 'cosmetics-raw-materials',
+    descEn: 'Carbomers, UV blocking agents, surfactants, lanolin, emollients, and cosmetic preservatives.',
+    descAr: 'كاربومير وفلاتر أشعة الشمس ومستحلبات ولانولين ومرطبات ومواد حافظة تجميلية.',
+    standards: 'USP • BP • EP',
     Icon: Sparkles,
-    chemicals: [
-      { name: 'Sodium Hyaluronate', cas: '9067-32-7', grade: 'Multi-MW' },
-      { name: 'Octocrylene', cas: '6197-30-4', grade: 'UV Filter' },
-      { name: 'Alpha-Arbutin', cas: '84380-01-8', grade: 'Brightening' },
-      { name: 'Allantoin', cas: '97-59-6', grade: 'Soothing' },
+    samples: [
+      { name: 'Carbomer 940 / 934', standard: 'USP/BP/EP', packing: '25KG/DRUM or BAG' },
+      { name: 'Octyl Methoxycinnamate', standard: 'IP/BP/USP', packing: 'Standard Pack' },
+      { name: 'Dexpanthenol (Vitamin B5)', standard: 'USP34', packing: '15KG/PLASTIC DRUM' },
+      { name: 'PEG 200–6000 / Tween 80', standard: 'IP/BP/USP', packing: '230/215 KG/DRUM' },
     ],
   },
   {
-    id: 'specialty',
-    categoryName: 'Specialty Synthesis & Custom Sourcing',
-    categoryNameAr: 'التخليق المتخصص والتوريد المخصص',
-    slug: 'contact',
-    tagline: 'Rare Chemical Indenting & Custom Dossiers',
-    taglineAr: 'استيراد كيميائي مباشر وملفات فنية مخصصة',
-    standards: 'Custom Synthesis • Tailored PSD',
-    description:
-      'Can’t find your CAS number or particle size? We coordinate direct synthesis with audited partners and handle Egyptian import licensing and testing.',
-    descriptionAr:
-      'هل تبحث عن رقم CAS أو حجم حبيبات محدد؟ ننسق التخليق المباشر مع المصانع العالمية المعتمدة وننهي إجراءات الاستيراد والفحص.',
-    Icon: Globe2,
-    chemicals: [
-      { name: 'Custom Particle Size', cas: 'Custom', grade: 'Micronized' },
-      { name: 'Low Endotoxin Excipients', cas: 'Custom', grade: 'Injectable' },
-      { name: 'Rare Monograph Actives', cas: 'Custom', grade: 'Sourcing' },
-      { name: 'Buffer Stocks', cas: 'Cairo Hub', grade: 'Harvest' },
+    id: 'nutraceutical',
+    titleEn: 'Nutraceutical Raw Materials',
+    titleAr: 'خامات المكملات الغذائية',
+    slug: 'nutraceutical-raw-materials',
+    descEn: 'Vitamins, gluconates, nutritional minerals, and food-grade sweeteners for supplements.',
+    descAr: 'فيتامينات وجلوكونات ومعادن غذائية ومحليات معتمدة لصناعة المكملات الغذائية.',
+    standards: 'USP • FCC • EP',
+    Icon: HeartPulse,
+    samples: [
+      { name: 'Ascorbic Acid (Vitamin C)', standard: 'BP/USP/EP/FCC', packing: '25KG/CARTON' },
+      { name: 'Vitamin D3 (100k–40M IU)', standard: 'Food/Pharma', packing: '25KG/CTN or DRUM' },
+      { name: 'Ferrous / Calcium Gluconate', standard: 'BP/USP/FCC/EP', packing: '25KG/DRUM or BAG' },
+      { name: 'Sucralose / Acesulfame K', standard: 'BP/USP/FCC/EP', packing: '25KG/DRUM or BAG' },
     ],
   },
 ];
 
-/** Slide 3 — Arshine-style "Our product" horizontal division swiper. */
 export const ArshineProductCarousel: React.FC = () => {
   const { t } = useLanguage();
   const [isRfqOpen, setIsRfqOpen] = useState(false);
   const [selectedDivision, setSelectedDivision] = useState<string | null>(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const trackRef = useRef<HTMLDivElement>(null);
-
-  const updateIndexFromScroll = useCallback(() => {
-    const el = trackRef.current;
-    if (!el) return;
-    const card = el.querySelector<HTMLElement>('[data-card]');
-    if (!card) return;
-    const cardWidth = card.offsetWidth + 20;
-    const scrollPos = Math.abs(el.scrollLeft);
-    const idx = Math.min(
-      CAROUSEL_DIVISIONS.length - 1,
-      Math.max(0, Math.round(scrollPos / cardWidth))
-    );
-    setCurrentIndex(idx);
-  }, []);
-
-  useEffect(() => {
-    const el = trackRef.current;
-    if (!el) return;
-    let ticking = false;
-    const onScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          updateIndexFromScroll();
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-    el.addEventListener('scroll', onScroll, { passive: true });
-    return () => el.removeEventListener('scroll', onScroll);
-  }, [updateIndexFromScroll]);
-
-  const scrollByCard = useCallback(
-    (direction: 1 | -1) => {
-      const el = trackRef.current;
-      if (!el) return;
-      const isRtl = document.documentElement.dir === 'rtl';
-      const card = el.querySelector<HTMLElement>('[data-card]');
-      const step = (card?.offsetWidth ?? 420) + 20;
-      const targetIdx = Math.max(0, Math.min(CAROUSEL_DIVISIONS.length - 1, currentIndex + direction));
-      setCurrentIndex(targetIdx);
-      el.scrollTo({ left: (isRtl ? -1 : 1) * targetIdx * step, behavior: 'smooth' });
-    },
-    [currentIndex]
-  );
 
   return (
-    <SectionShell label="Products" tone="forest" image="/images/bg-chem-powder.jpg">
-      <div className="space-y-6">
-        <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
+    <SectionShell label="Sectors" tone="forest" image="/images/deltachem-raw-drums.jpg">
+      <div className="space-y-10">
+        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <SectionHeader
             onDark
-            eyebrow={t('Our Products', 'منتجاتنا')}
-            title={t('Core Divisions & Ingredient Portfolio', 'الأقسام الرئيسية ومحفظة المكونات')}
+            eyebrow={t('Official Product List', 'قائمة الخامات المعتمدة')}
+            title={t('Four Core Raw Material Sectors', 'القطاعات الأربعة للخامات الدوائية')}
             description={t(
-              'Swipe across our specialised divisions to inspect verified monographs, CAS registries and clinical specifications.',
-              'استعرض أقسامنا المتخصصة للاطلاع على المواصفات المعتمدة وأرقام CAS والخصائص الفنية.'
+              'Explore verified raw materials organized across our four specialized industrial divisions.',
+              'استكشف محفظة خاماتنا الفعلية المصنفة بدقة ضمن أربعة قطاعات متخصصة.'
             )}
           />
-          <div className="flex shrink-0 items-center gap-3">
-            {/* Arshine-style Swiper Fraction Counter */}
-            <div
-              aria-label={t(
-                `Slide ${currentIndex + 1} of ${CAROUSEL_DIVISIONS.length}`,
-                `شريحة ${currentIndex + 1} من ${CAROUSEL_DIVISIONS.length}`
-              )}
-              className="flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-4 py-2 font-mono text-sm font-extrabold text-white backdrop-blur-md shadow-sm"
-            >
-              <span className="text-teal-400">{String(currentIndex + 1).padStart(2, '0')}</span>
-              <span className="text-white/40">/</span>
-              <span>{String(CAROUSEL_DIVISIONS.length).padStart(2, '0')}</span>
-            </div>
-            <button
-              type="button"
-              onClick={() => scrollByCard(-1)}
-              aria-label={t('Previous division', 'القسم السابق')}
-              className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-white/30 bg-white/10 text-white backdrop-blur transition-all hover:scale-105 hover:bg-teal-500"
-            >
-              <ChevronLeft className="h-5 w-5 rtl:rotate-180" />
-            </button>
-            <button
-              type="button"
-              onClick={() => scrollByCard(1)}
-              aria-label={t('Next division', 'القسم التالي')}
-              className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-white/30 bg-white/10 text-white backdrop-blur transition-all hover:scale-105 hover:bg-teal-500"
-            >
-              <ChevronRight className="h-5 w-5 rtl:rotate-180" />
-            </button>
-          </div>
+          <Link href="/products" className="shrink-0">
+            <Button variant="teal" size="lg" className="px-6 font-bold">
+              <span>{t('Browse All Products', 'عرض الدليل الكامل')}</span>
+              <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+            </Button>
+          </Link>
         </div>
 
-        <div
-          ref={trackRef}
-          className="scrollbar-none -mx-4 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth px-4 pb-3 sm:-mx-8 sm:px-8 lg:-mx-14 lg:px-14 xl:-mx-20 xl:px-20"
-        >
-          {CAROUSEL_DIVISIONS.map((division, idx) => (
-            <motion.article
-              key={division.id}
-              data-card
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.45, delay: idx * 0.07 }}
-              className="group flex w-[min(86vw,25rem)] shrink-0 snap-start flex-col justify-between gap-3 rounded-3xl border border-white/15 bg-white/10 p-4.5 shadow-xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-teal-400 hover:bg-white/15 sm:p-5 xl:w-[26rem]"
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          {SECTORS.map((sector) => (
+            <article
+              key={sector.id}
+              className="group flex flex-col justify-between gap-5 rounded-3xl border border-white/15 bg-white/10 p-6 shadow-xl backdrop-blur-md transition-all duration-200 hover:border-teal-400 hover:bg-white/15 sm:p-7"
             >
-              <div className="space-y-2.5">
-                <div className="flex items-center justify-between">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-teal-400/20 text-teal-400 transition-all group-hover:scale-105 group-hover:bg-teal-400 group-hover:text-teal-950">
-                    <division.Icon className="h-5 w-5" />
+              <div className="space-y-4">
+                <div className="flex items-center justify-between gap-3">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-teal-400/20 text-teal-300 transition group-hover:bg-teal-400 group-hover:text-teal-950">
+                    <sector.Icon className="h-5 w-5" />
                   </span>
-                  <span className="rounded-full border border-amber-400/50 bg-amber-500/10 px-3 py-0.5 text-xs font-bold text-amber-300">
-                    {division.standards}
+                  <span className="rounded-full border border-amber-400/40 bg-amber-500/10 px-3 py-1 text-xs font-bold text-amber-300">
+                    {sector.standards}
                   </span>
                 </div>
 
-                <h3 className="text-lg font-extrabold leading-tight tracking-tight text-white lg:text-xl">
-                  {t(division.categoryName, division.categoryNameAr)}
-                </h3>
-                <p className="text-xs font-semibold text-teal-400 sm:text-sm">
-                  {t(division.tagline, division.taglineAr)}
-                </p>
-                <p className="line-clamp-2 text-xs leading-relaxed text-slate-200 sm:text-sm">
-                  {t(division.description, division.descriptionAr)}
-                </p>
+                <div>
+                  <h3 className="text-xl font-extrabold text-white">
+                    {t(sector.titleEn, sector.titleAr)}
+                  </h3>
+                  <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-slate-200">
+                    {t(sector.descEn, sector.descAr)}
+                  </p>
+                </div>
 
-                <ul className="grid grid-cols-2 gap-1.5">
-                  {division.chemicals.map((chem) => (
+                <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  {sector.samples.map((item) => (
                     <li
-                      key={chem.name}
-                      className="rounded-xl border border-white/10 bg-teal-950/50 p-2 text-xs"
+                      key={item.name}
+                      className="rounded-xl border border-white/10 bg-teal-950/60 p-2.5 text-xs"
                     >
-                      <span className="block truncate font-bold text-white">{chem.name}</span>
-                      <span className="mt-0.5 flex items-center justify-between gap-1 font-mono text-[0.68rem] text-slate-300">
-                        <span className="truncate">CAS {chem.cas}</span>
-                        <span className="shrink-0 text-teal-400">{chem.grade}</span>
+                      <span className="block truncate font-bold text-white">{item.name}</span>
+                      <span className="mt-0.5 block truncate font-mono text-[11px] text-teal-300">
+                        {item.standard} · {item.packing}
                       </span>
                     </li>
                   ))}
                 </ul>
               </div>
 
-              <div className="flex items-center justify-between gap-3 border-t border-white/15 pt-3">
+              <div className="flex items-center justify-between gap-3 border-t border-white/15 pt-4">
                 <Button
                   variant="teal"
                   size="sm"
                   onClick={() => {
-                    setSelectedDivision(division.categoryName);
+                    setSelectedDivision(t(sector.titleEn, sector.titleAr));
                     setIsRfqOpen(true);
                   }}
-                  className="min-h-[44px] px-4 text-sm font-bold"
+                  className="min-h-[42px] px-4 text-sm font-bold"
                 >
                   {t('Request RFQ', 'طلب تسعير')}
                 </Button>
                 <Link
-                  href={`/products?category=${division.slug}`}
-                  className="group/link inline-flex min-h-[44px] items-center gap-1.5 text-sm font-bold text-white transition hover:text-teal-400"
+                  href={`/divisions/${sector.slug}`}
+                  className="inline-flex min-h-[42px] items-center gap-1.5 text-sm font-bold text-white transition hover:text-teal-300"
                 >
-                  <span>{t('View Catalog', 'عرض الكتالوج')}</span>
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover/link:translate-x-1 rtl:rotate-180 rtl:group-hover/link:-translate-x-1" />
+                  <span>{t('View Sector List', 'عرض خامات القطاع')}</span>
+                  <ArrowRight className="h-4 w-4 rtl:rotate-180" />
                 </Link>
               </div>
-            </motion.article>
-          ))}
-        </div>
-
-        {/* Pagination bullets (Swiper style) */}
-        <div className="flex items-center justify-center gap-2 pt-1">
-          {CAROUSEL_DIVISIONS.map((division, idx) => (
-            <button
-              key={division.id}
-              type="button"
-              onClick={() => {
-                const el = trackRef.current;
-                if (!el) return;
-                const isRtl = document.documentElement.dir === 'rtl';
-                const card = el.querySelector<HTMLElement>('[data-card]');
-                const step = (card?.offsetWidth ?? 420) + 20;
-                setCurrentIndex(idx);
-                el.scrollTo({ left: (isRtl ? -1 : 1) * idx * step, behavior: 'smooth' });
-              }}
-              aria-label={`Go to ${division.categoryName}`}
-              className={`h-2 cursor-pointer rounded-full transition-all ${
-                currentIndex === idx ? 'w-8 bg-teal-400' : 'w-2 bg-white/40 hover:bg-white/70'
-              }`}
-            />
+            </article>
           ))}
         </div>
       </div>

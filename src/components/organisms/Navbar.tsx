@@ -1,14 +1,16 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { siteConfig } from '@/config/site';
 import { Button } from '@/components/atoms/Button';
 import { LanguageSwitcher } from '@/components/molecules/LanguageSwitcher';
 import { RfqModal } from '@/components/molecules/RfqModal';
 import { useLanguage } from '@/components/providers/LanguageContext';
+import { SPRING_SNAPPY, CROSSFADE_REDUCED } from '@/lib/motion';
 import {
   Menu,
   X,
@@ -16,64 +18,106 @@ import {
   Sparkles,
   Phone,
   Mail,
-  Building,
   ShieldCheck,
-  FileCheck,
-  Truck,
   FlaskConical,
   Pill,
+  MessageCircle,
+  HeartPulse,
 } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const pathname = usePathname();
   const { t } = useLanguage();
+  const reduceMotion = useReducedMotion();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProductsDropdownOpen, setIsProductsDropdownOpen] = useState(false);
   const [isRfqOpen, setIsRfqOpen] = useState(false);
+  const dropdownContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
-    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (!isProductsDropdownOpen && !isMobileMenuOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsProductsDropdownOpen(false);
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    const handlePointerDown = (e: PointerEvent) => {
+      const target = e.target;
+      if (
+        isProductsDropdownOpen &&
+        dropdownContainerRef.current &&
+        target instanceof Node &&
+        !dropdownContainerRef.current.contains(target)
+      ) {
+        setIsProductsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('pointerdown', handlePointerDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('pointerdown', handlePointerDown);
+    };
+  }, [isProductsDropdownOpen, isMobileMenuOpen]);
+
+  const menuTransition = reduceMotion ? CROSSFADE_REDUCED : SPRING_SNAPPY;
 
   return (
     <>
       {/* Top corporate bar */}
-      <div className="snap-top bg-teal-950 text-slate-300 text-xs py-2 px-4 border-b border-teal-900 hidden md:block">
-        <div className="max-w-[1720px] mx-auto px-4 sm:px-8 lg:px-14 xl:px-20 flex items-center justify-between">
-          <div className="flex items-center gap-6">
-            <span className="flex items-center gap-1.5 text-slate-400">
-              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              {t(
-                'Egypt & MENA B2B Pharmaceutical Ingredient Supply',
-                'توريد وتوزيع المواد الخام الصيدلانية لمصر والشرق الأوسط'
-              )}
-            </span>
-            <span className="text-slate-600">|</span>
-            <span className="text-slate-400">
-              {t('Warehousing Partner: Harvest Pharma (Cairo)', 'شريك التخزين: هارفست فارما (القاهرة)')}
+      <div className="snap-top hidden border-b border-teal-900 bg-teal-950 px-4 py-2 text-xs text-slate-300 md:block">
+        <div className="mx-auto flex max-w-[1440px] items-center justify-between px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-4">
+            <span className="flex items-center gap-2 text-slate-300">
+              <span className="h-2 w-2 rounded-full bg-emerald-400" />
+              {t('Pharmaceutical Raw Materials Supply · Egypt & MENA', 'استيراد وتوريد الخامات الدوائية · مصر والشرق الأوسط')}
             </span>
           </div>
 
-          <div className="flex items-center gap-5">
+          <div className="flex flex-wrap items-center gap-4">
+            <div className="flex items-center gap-2 text-slate-200">
+              <Phone className="h-3.5 w-3.5 text-teal-400" />
+              <a href={`tel:${siteConfig.contact.phoneClean}`} className="font-mono hover:text-white">
+                {siteConfig.contact.phone}
+              </a>
+              <span className="text-slate-600">/</span>
+              <a href={`tel:${siteConfig.contact.phoneSecondaryClean}`} className="font-mono hover:text-white">
+                {siteConfig.contact.phoneSecondary}
+              </a>
+            </div>
+
             <a
-              href={`tel:${siteConfig.contact.phoneClean}`}
-              className="flex items-center gap-1 text-slate-300 hover:text-white transition"
+              href={siteConfig.socials.whatsappPrimary}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600/20 px-2.5 py-0.5 text-emerald-300 transition hover:bg-emerald-600 hover:text-white active:scale-95"
             >
-              <Phone className="w-3 h-3 text-teal-400" />
-              <span>{siteConfig.contact.phone}</span>
+              <MessageCircle className="h-3 w-3" />
+              <span className="font-mono">{siteConfig.contact.mobiles[0].display}</span>
             </a>
+
             <a
               href={`mailto:${siteConfig.contact.email}`}
-              className="flex items-center gap-1 text-slate-300 hover:text-white transition"
+              className="flex items-center gap-1 text-slate-300 transition hover:text-white"
             >
-              <Mail className="w-3 h-3 text-teal-400" />
+              <Mail className="h-3.5 w-3.5 text-teal-400" />
               <span>{siteConfig.contact.email}</span>
             </a>
+
             <LanguageSwitcher />
           </div>
         </div>
@@ -82,145 +126,161 @@ export const Navbar: React.FC = () => {
       {/* Main sticky navigation */}
       <header
         className={`sticky top-0 z-40 w-full transition-shadow duration-300 ${
-          isScrolled
-            ? 'bg-white/95 backdrop-blur-md shadow-md border-b border-slate-200'
-            : 'bg-white border-b border-slate-100'
+          isScrolled ? 'border-b border-slate-200 bg-white shadow-md' : 'border-b border-slate-100 bg-white'
         }`}
       >
-        <div className="h-[var(--header-h)] max-w-[1720px] mx-auto px-4 sm:px-8 lg:px-14 xl:px-20 flex items-center justify-between">
-          {/* Authentic Logo */}
-          <Link href="/" className="flex items-center gap-3 shrink-0">
-            <div className="relative w-44 h-11">
-              <Image
-                src="/images/logo-delta-chem.png"
-                alt="DELTACHEM Company"
-                fill
-                priority
-                className="object-contain"
-                sizes="(max-width: 768px) 150px, 180px"
-              />
-            </div>
+        <div className="mx-auto flex h-[var(--header-h)] max-w-[1440px] items-center justify-between px-4 sm:px-6 lg:px-8">
+          {/* Official Brand Logo */}
+          <Link href="/" className="flex shrink-0 items-center transition-transform active:scale-[0.98]">
+            <Image
+              src="/images/logo-delta-chem.png"
+              alt="DELTACHEM - From Quality to Excellence"
+              width={932}
+              height={531}
+              priority
+              fetchPriority="high"
+              className="h-12 w-auto object-contain sm:h-13"
+            />
           </Link>
 
           {/* Desktop Nav Items */}
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
-            {/* Products Mega Dropdown */}
+          <nav className="hidden items-center gap-1 lg:flex xl:gap-2">
+            {/* Products Mega Dropdown (hover + click/tap + keyboard + Esc) */}
             <div
+              ref={dropdownContainerRef}
               className="relative"
               onMouseEnter={() => setIsProductsDropdownOpen(true)}
               onMouseLeave={() => setIsProductsDropdownOpen(false)}
             >
               <button
-                className={`flex items-center gap-1 px-3 py-2 text-sm font-semibold rounded-md transition cursor-pointer ${
+                type="button"
+                aria-expanded={isProductsDropdownOpen}
+                aria-haspopup="true"
+                aria-controls="products-sector-menu"
+                onClick={() => setIsProductsDropdownOpen((prev) => !prev)}
+                className={`flex cursor-pointer items-center gap-1 rounded-lg px-3 py-2 text-sm font-semibold transition-all duration-150 active:scale-[0.97] ${
                   pathname.startsWith('/products') || pathname.startsWith('/divisions')
-                    ? 'text-teal-700 bg-teal-50/70'
-                    : 'text-slate-700 hover:text-slate-900 hover:bg-slate-50'
+                    ? 'bg-teal-600/10 text-teal-700'
+                    : 'text-slate-700 hover:bg-slate-900/5 hover:text-slate-900'
                 }`}
               >
-                <span>{t('Product Portfolio', 'دليل المنتجات')}</span>
-                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isProductsDropdownOpen ? 'rotate-180' : ''}`} />
+                <span>{t('Products', 'دليل الخامات')}</span>
+                <ChevronDown
+                  className={`h-4 w-4 transition-transform duration-200 ${
+                    isProductsDropdownOpen ? 'rotate-180' : ''
+                  }`}
+                />
               </button>
 
-              {/* Mega Menu Dropdown */}
-              {isProductsDropdownOpen && (
-                <div className="absolute top-full left-0 w-[580px] bg-white rounded-xl shadow-2xl border border-slate-200 p-5 grid grid-cols-2 gap-3 transition-all z-50">
-                  <div className="col-span-2 pb-2 mb-1 border-b border-slate-100 flex items-center justify-between">
-                    <span className="text-xs uppercase font-bold text-slate-400 tracking-wider">
-                      {t('Core Ingredient Divisions', 'الأقسام الرئيسية للمكونات')}
-                    </span>
+              <AnimatePresence>
+                {isProductsDropdownOpen && (
+                  <motion.div
+                    id="products-sector-menu"
+                    initial={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.96, y: -6 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.97, y: -4 }}
+                    transition={menuTransition}
+                    className="absolute left-0 top-full z-50 mt-1 grid w-[560px] origin-top-left grid-cols-2 gap-3 rounded-2xl border border-slate-200 bg-white p-5 shadow-2xl rtl:left-auto rtl:right-0 rtl:origin-top-right"
+                  >
+                    <div className="col-span-2 mb-1 flex items-center justify-between border-b border-slate-200/70 pb-2">
+                      <span className="text-xs font-bold uppercase tracking-wider text-slate-500 rtl:normal-case rtl:tracking-normal">
+                        {t('Four Core Sectors', 'القطاعات الأربعة الرئيسية')}
+                      </span>
+                      <Link
+                        href="/products"
+                        onClick={() => setIsProductsDropdownOpen(false)}
+                        className="text-xs font-semibold text-teal-700 hover:text-teal-900"
+                      >
+                        {t('Full Product List →', 'كل الخامات ←')}
+                      </Link>
+                    </div>
+
+                    <Link
+                      href="/divisions/human-raw-materials"
+                      onClick={() => setIsProductsDropdownOpen(false)}
+                      className="group rounded-xl border border-transparent p-3 transition hover:border-slate-200/80 hover:bg-white/80 active:scale-[0.98]"
+                    >
+                      <div className="mb-1 flex items-center gap-2">
+                        <Pill className="h-4 w-4 text-teal-600" />
+                        <span className="text-sm font-bold text-slate-800 group-hover:text-teal-700">
+                          {t('Human Raw Materials', 'الخامات البشرية')}
+                        </span>
+                      </div>
+                      <p className="text-xs text-slate-500">
+                        {t('APIs, antibiotics, analgesics & excipients', 'مضادات حيوية ومسكنات وسواغات دوائية')}
+                      </p>
+                    </Link>
+
+                    <Link
+                      href="/divisions/veterinary-raw-materials"
+                      onClick={() => setIsProductsDropdownOpen(false)}
+                      className="group rounded-xl border border-transparent p-3 transition hover:border-slate-200/80 hover:bg-white/80 active:scale-[0.98]"
+                    >
+                      <div className="mb-1 flex items-center gap-2">
+                        <ShieldCheck className="h-4 w-4 text-amber-600" />
+                        <span className="text-sm font-bold text-slate-800 group-hover:text-amber-700">
+                          {t('Veterinary Raw Materials', 'الخامات البيطرية')}
+                        </span>
+                      </div>
+                      <p className="text-xs text-slate-500">
+                        {t('Vet antibiotics, antiparasitics & feed vitamins', 'مضادات حيوية بيطرية وإضافات أعلاف')}
+                      </p>
+                    </Link>
+
+                    <Link
+                      href="/divisions/cosmetics-raw-materials"
+                      onClick={() => setIsProductsDropdownOpen(false)}
+                      className="group rounded-xl border border-transparent p-3 transition hover:border-slate-200/80 hover:bg-white/80 active:scale-[0.98]"
+                    >
+                      <div className="mb-1 flex items-center gap-2">
+                        <Sparkles className="h-4 w-4 text-sky-600" />
+                        <span className="text-sm font-bold text-slate-800 group-hover:text-sky-700">
+                          {t('Cosmetics Raw Materials', 'خامات مستحضرات التجميل')}
+                        </span>
+                      </div>
+                      <p className="text-xs text-slate-500">
+                        {t('Carbomers, UV filters, surfactants & bases', 'كاربومير وفلاتر شمس ومستحلبات')}
+                      </p>
+                    </Link>
+
+                    <Link
+                      href="/divisions/nutraceutical-raw-materials"
+                      onClick={() => setIsProductsDropdownOpen(false)}
+                      className="group rounded-xl border border-transparent p-3 transition hover:border-slate-200/80 hover:bg-white/80 active:scale-[0.98]"
+                    >
+                      <div className="mb-1 flex items-center gap-2">
+                        <HeartPulse className="h-4 w-4 text-emerald-600" />
+                        <span className="text-sm font-bold text-slate-800 group-hover:text-emerald-700">
+                          {t('Nutraceutical Raw Materials', 'خامات المكملات الغذائية')}
+                        </span>
+                      </div>
+                      <p className="text-xs text-slate-500">
+                        {t('Vitamins, gluconates, minerals & sweeteners', 'فيتامينات وجلوكونات ومعادن ومحليات')}
+                      </p>
+                    </Link>
+
                     <Link
                       href="/products"
-                      className="text-xs font-semibold text-teal-600 hover:text-teal-800"
+                      onClick={() => setIsProductsDropdownOpen(false)}
+                      className="col-span-2 flex items-center justify-between rounded-xl border border-teal-200/80 bg-teal-50/80 px-3.5 py-2.5 text-xs font-bold text-teal-800 transition hover:bg-teal-100 active:scale-[0.99]"
                     >
-                      {t('View All Catalog ->', 'عرض الدليل الشامل ->')}
+                      <span className="flex items-center gap-2">
+                        <FlaskConical className="h-4 w-4" />
+                        {t('Search All Certified Raw Materials', 'البحث في كامل قائمة الخامات المعتمدة')}
+                      </span>
+                      <span className="rtl:rotate-180">→</span>
                     </Link>
-                  </div>
-
-                  <Link
-                    href="/divisions/pharmaceutical-apis"
-                    className="p-3 rounded-lg hover:bg-slate-50 border border-transparent hover:border-slate-200 transition group"
-                  >
-                    <div className="flex items-center gap-2 mb-1">
-                      <Pill className="w-4 h-4 text-teal-600" />
-                      <span className="text-sm font-bold text-slate-800 group-hover:text-teal-700">
-                        {t('Active APIs', 'المواد الفعالة (APIs)')}
-                      </span>
-                    </div>
-                    <p className="text-xs text-slate-500">
-                      {t('USP/BP/EP grade oral and sterile actives', 'مواد فعالة مطابقة لدساتير الأدوية الدولية')}
-                    </p>
-                  </Link>
-
-                  <Link
-                    href="/divisions/pharmaceutical-excipients"
-                    className="p-3 rounded-lg hover:bg-slate-50 border border-transparent hover:border-slate-200 transition group"
-                  >
-                    <div className="flex items-center gap-2 mb-1">
-                      <FlaskConical className="w-4 h-4 text-sky-600" />
-                      <span className="text-sm font-bold text-slate-800 group-hover:text-sky-700">
-                        {t('Pharma Excipients', 'السواغات الصيدلانية')}
-                      </span>
-                    </div>
-                    <p className="text-xs text-slate-500">
-                      {t('MCC, disintegrants, binders and coatings', 'سليلوز دقيق التبلور، روابط ومفككات')}
-                    </p>
-                  </Link>
-
-                  <Link
-                    href="/divisions/nutraceutical-ingredients"
-                    className="p-3 rounded-lg hover:bg-slate-50 border border-transparent hover:border-slate-200 transition group"
-                  >
-                    <div className="flex items-center gap-2 mb-1">
-                      <Sparkles className="w-4 h-4 text-emerald-600" />
-                      <span className="text-sm font-bold text-slate-800 group-hover:text-emerald-700">
-                        {t('Nutraceuticals', 'المكملات الغذائية')}
-                      </span>
-                    </div>
-                    <p className="text-xs text-slate-500">
-                      {t('Vitamins, minerals and dietary bioactives', 'فيتامينات، معادن، ومستخلصات غذائية')}
-                    </p>
-                  </Link>
-
-                  <Link
-                    href="/divisions/veterinary-ingredients"
-                    className="p-3 rounded-lg hover:bg-slate-50 border border-transparent hover:border-slate-200 transition group"
-                  >
-                    <div className="flex items-center gap-2 mb-1">
-                      <ShieldCheck className="w-4 h-4 text-amber-600" />
-                      <span className="text-sm font-bold text-slate-800 group-hover:text-amber-700">
-                        {t('Veterinary Ingredients', 'المكونات البيطرية')}
-                      </span>
-                    </div>
-                    <p className="text-xs text-slate-500">
-                      {t('Animal health APIs and feed additives', 'مواد فعالة بيطرية وإضافات أعلاف')}
-                    </p>
-                  </Link>
-
-                  <Link
-                    href="/divisions/cosmeceuticals-ingredients"
-                    className="col-span-2 p-3 rounded-lg hover:bg-slate-50 border border-transparent hover:border-slate-200 transition group"
-                  >
-                    <div className="flex items-center gap-2 mb-1">
-                      <Sparkles className="w-4 h-4 text-indigo-600" />
-                      <span className="text-sm font-bold text-slate-800 group-hover:text-indigo-700">
-                        {t('Cosmeceuticals & Personal Care', 'مستحضرات التجميل العلاجية')}
-                      </span>
-                    </div>
-                    <p className="text-xs text-slate-500">
-                      {t('Sodium hyaluronate, UV filters, and skin barrier actives', 'حمض الهيالورونيك وفلاتر الحماية من الشمس ومغذيات البشرة')}
-                    </p>
-                  </Link>
-                </div>
-              )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
-            {/* Standard Links */}
             <Link
               href="/about"
-              className={`px-3 py-2 text-sm font-medium rounded-md transition ${
+              className={`rounded-lg px-3 py-2 text-sm font-medium transition active:scale-[0.97] ${
                 pathname === '/about'
-                  ? 'text-teal-700 font-semibold bg-teal-50/50'
-                  : 'text-slate-700 hover:text-slate-900 hover:bg-slate-50'
+                  ? 'bg-teal-600/10 font-semibold text-teal-700'
+                  : 'text-slate-700 hover:bg-slate-900/5 hover:text-slate-900'
               }`}
             >
               {t('About', 'عن الشركة')}
@@ -228,10 +288,10 @@ export const Navbar: React.FC = () => {
 
             <Link
               href="/services"
-              className={`px-3 py-2 text-sm font-medium rounded-md transition ${
+              className={`rounded-lg px-3 py-2 text-sm font-medium transition active:scale-[0.97] ${
                 pathname === '/services'
-                  ? 'text-teal-700 font-semibold bg-teal-50/50'
-                  : 'text-slate-700 hover:text-slate-900 hover:bg-slate-50'
+                  ? 'bg-teal-600/10 font-semibold text-teal-700'
+                  : 'text-slate-700 hover:bg-slate-900/5 hover:text-slate-900'
               }`}
             >
               {t('Services', 'الخدمات')}
@@ -239,21 +299,21 @@ export const Navbar: React.FC = () => {
 
             <Link
               href="/quality-regulatory"
-              className={`px-3 py-2 text-sm font-medium rounded-md transition ${
+              className={`rounded-lg px-3 py-2 text-sm font-medium transition active:scale-[0.97] ${
                 pathname === '/quality-regulatory'
-                  ? 'text-teal-700 font-semibold bg-teal-50/50'
-                  : 'text-slate-700 hover:text-slate-900 hover:bg-slate-50'
+                  ? 'bg-teal-600/10 font-semibold text-teal-700'
+                  : 'text-slate-700 hover:bg-slate-900/5 hover:text-slate-900'
               }`}
             >
-              {t('Quality & Regulatory', 'الجودة والشؤون التنظيمية')}
+              {t('Quality', 'الجودة والتسجيل')}
             </Link>
 
             <Link
               href="/supply-chain"
-              className={`px-3 py-2 text-sm font-medium rounded-md transition ${
+              className={`rounded-lg px-3 py-2 text-sm font-medium transition active:scale-[0.97] ${
                 pathname === '/supply-chain'
-                  ? 'text-teal-700 font-semibold bg-teal-50/50'
-                  : 'text-slate-700 hover:text-slate-900 hover:bg-slate-50'
+                  ? 'bg-teal-600/10 font-semibold text-teal-700'
+                  : 'text-slate-700 hover:bg-slate-900/5 hover:text-slate-900'
               }`}
             >
               {t('Supply Chain', 'سلاسل الإمداد')}
@@ -261,21 +321,21 @@ export const Navbar: React.FC = () => {
 
             <Link
               href="/industries"
-              className={`px-3 py-2 text-sm font-medium rounded-md transition ${
+              className={`rounded-lg px-3 py-2 text-sm font-medium transition active:scale-[0.97] ${
                 pathname === '/industries'
-                  ? 'text-teal-700 font-semibold bg-teal-50/50'
-                  : 'text-slate-700 hover:text-slate-900 hover:bg-slate-50'
+                  ? 'bg-teal-600/10 font-semibold text-teal-700'
+                  : 'text-slate-700 hover:bg-slate-900/5 hover:text-slate-900'
               }`}
             >
-              {t('Industries', 'القطاعات')}
+              {t('Sectors', 'القطاعات')}
             </Link>
 
             <Link
               href="/insights"
-              className={`px-3 py-2 text-sm font-medium rounded-md transition ${
-                pathname === '/insights'
-                  ? 'text-teal-700 font-semibold bg-teal-50/50'
-                  : 'text-slate-700 hover:text-slate-900 hover:bg-slate-50'
+              className={`rounded-lg px-3 py-2 text-sm font-medium transition active:scale-[0.97] ${
+                pathname.startsWith('/insights')
+                  ? 'bg-teal-600/10 font-semibold text-teal-700'
+                  : 'text-slate-700 hover:bg-slate-900/5 hover:text-slate-900'
               }`}
             >
               {t('Insights', 'المقالات')}
@@ -283,10 +343,10 @@ export const Navbar: React.FC = () => {
 
             <Link
               href="/contact"
-              className={`px-3 py-2 text-sm font-medium rounded-md transition ${
+              className={`rounded-lg px-3 py-2 text-sm font-medium transition active:scale-[0.97] ${
                 pathname === '/contact'
-                  ? 'text-teal-700 font-semibold bg-teal-50/50'
-                  : 'text-slate-700 hover:text-slate-900 hover:bg-slate-50'
+                  ? 'bg-teal-600/10 font-semibold text-teal-700'
+                  : 'text-slate-700 hover:bg-slate-900/5 hover:text-slate-900'
               }`}
             >
               {t('Contact', 'اتصل بنا')}
@@ -309,128 +369,147 @@ export const Navbar: React.FC = () => {
 
             {/* Mobile Hamburger */}
             <button
+              type="button"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 text-slate-700 hover:text-slate-900 rounded-md focus:outline-none"
+              aria-expanded={isMobileMenuOpen}
+              className="rounded-lg p-2 text-slate-700 transition hover:bg-slate-900/5 hover:text-slate-900 active:scale-95 lg:hidden"
               aria-label="Toggle mobile menu"
             >
-              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
         </div>
 
         {/* Mobile Navigation Drawer */}
-        {isMobileMenuOpen && (
-          <div className="lg:hidden bg-white border-t border-slate-200 px-4 pt-3 pb-6 space-y-2 shadow-xl animate-in slide-in-from-top duration-200">
-            <Link
-              href="/products"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="block px-3 py-2 text-base font-bold text-teal-800 rounded-md bg-teal-50/60"
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
+              transition={menuTransition}
+              className="space-y-2 border-t border-slate-200 bg-white px-4 pb-6 pt-3 shadow-xl lg:hidden"
             >
-              {t('All Products Catalog', 'دليل المنتجات الشامل')}
-            </Link>
-            <div className="pl-4 space-y-1 text-sm border-l-2 border-teal-200 rtl:border-l-0 rtl:border-r-2 rtl:pr-4">
               <Link
-                href="/divisions/pharmaceutical-apis"
+                href="/products"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block py-1 text-slate-700 hover:text-teal-700"
+                className="block rounded-lg bg-teal-50/80 px-3 py-2 text-base font-bold text-teal-800"
               >
-                {t('Active Pharmaceutical Ingredients (APIs)', 'المواد الفعالة الصيدلانية')}
+                {t('Full Product Catalog', 'قائمة الخامات الكاملة')}
               </Link>
-              <Link
-                href="/divisions/pharmaceutical-excipients"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="block py-1 text-slate-700 hover:text-teal-700"
-              >
-                {t('Pharmaceutical Excipients', 'السواغات الصيدلانية')}
-              </Link>
-              <Link
-                href="/divisions/nutraceutical-ingredients"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="block py-1 text-slate-700 hover:text-teal-700"
-              >
-                {t('Nutraceutical Ingredients', 'مكونات المكملات الغذائية')}
-              </Link>
-              <Link
-                href="/divisions/veterinary-ingredients"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="block py-1 text-slate-700 hover:text-teal-700"
-              >
-                {t('Veterinary Ingredients', 'المكونات البيطرية')}
-              </Link>
-              <Link
-                href="/divisions/cosmeceuticals-ingredients"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="block py-1 text-slate-700 hover:text-teal-700"
-              >
-                {t('Cosmeceuticals Ingredients', 'مستحضرات التجميل العلاجية')}
-              </Link>
-            </div>
+              <div className="space-y-1 border-l-2 border-teal-200 pl-4 text-sm rtl:border-l-0 rtl:border-r-2 rtl:pl-0 rtl:pr-4">
+                <Link
+                  href="/divisions/human-raw-materials"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block py-1 text-slate-700 hover:text-teal-700"
+                >
+                  {t('Human Raw Materials', 'الخامات البشرية')}
+                </Link>
+                <Link
+                  href="/divisions/veterinary-raw-materials"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block py-1 text-slate-700 hover:text-teal-700"
+                >
+                  {t('Veterinary Raw Materials', 'الخامات البيطرية')}
+                </Link>
+                <Link
+                  href="/divisions/cosmetics-raw-materials"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block py-1 text-slate-700 hover:text-teal-700"
+                >
+                  {t('Cosmetics Raw Materials', 'خامات مستحضرات التجميل')}
+                </Link>
+                <Link
+                  href="/divisions/nutraceutical-raw-materials"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block py-1 text-slate-700 hover:text-teal-700"
+                >
+                  {t('Nutraceutical Raw Materials', 'خامات المكملات الغذائية')}
+                </Link>
+              </div>
 
-            <Link
-              href="/about"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="block px-3 py-2 text-base font-medium text-slate-700 hover:bg-slate-50 rounded-md"
-            >
-              {t('About DELTACHEM', 'عن دلتا كيم')}
-            </Link>
-            <Link
-              href="/services"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="block px-3 py-2 text-base font-medium text-slate-700 hover:bg-slate-50 rounded-md"
-            >
-              {t('Services', 'الخدمات')}
-            </Link>
-            <Link
-              href="/quality-regulatory"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="block px-3 py-2 text-base font-medium text-slate-700 hover:bg-slate-50 rounded-md"
-            >
-              {t('Quality & Regulatory', 'الجودة والشؤون التنظيمية')}
-            </Link>
-            <Link
-              href="/supply-chain"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="block px-3 py-2 text-base font-medium text-slate-700 hover:bg-slate-50 rounded-md"
-            >
-              {t('Supply Chain & Logistics', 'سلاسل الإمداد والتخزين')}
-            </Link>
-            <Link
-              href="/industries"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="block px-3 py-2 text-base font-medium text-slate-700 hover:bg-slate-50 rounded-md"
-            >
-              {t('Industries We Serve', 'القطاعات الصناعية')}
-            </Link>
-            <Link
-              href="/partners"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="block px-3 py-2 text-base font-medium text-slate-700 hover:bg-slate-50 rounded-md"
-            >
-              {t('Global Partners', 'شركاؤنا العالميون')}
-            </Link>
-            <Link
-              href="/insights"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="block px-3 py-2 text-base font-medium text-slate-700 hover:bg-slate-50 rounded-md"
-            >
-              {t('News & Insights', 'الأخبار والمقالات')}
-            </Link>
-            <Link
-              href="/contact"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="block px-3 py-2 text-base font-medium text-slate-700 hover:bg-slate-50 rounded-md"
-            >
-              {t('Contact Us', 'اتصل بنا')}
-            </Link>
-          </div>
-        )}
+              <Link
+                href="/about"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block rounded-lg px-3 py-2 text-base font-medium text-slate-700 hover:bg-white/70"
+              >
+                {t('About DELTACHEM', 'عن دلتا كيم')}
+              </Link>
+              <Link
+                href="/services"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block rounded-lg px-3 py-2 text-base font-medium text-slate-700 hover:bg-white/70"
+              >
+                {t('Services', 'الخدمات')}
+              </Link>
+              <Link
+                href="/quality-regulatory"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block rounded-lg px-3 py-2 text-base font-medium text-slate-700 hover:bg-white/70"
+              >
+                {t('Quality & Regulatory', 'الجودة والتسجيل')}
+              </Link>
+              <Link
+                href="/supply-chain"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block rounded-lg px-3 py-2 text-base font-medium text-slate-700 hover:bg-white/70"
+              >
+                {t('Supply Chain', 'سلاسل الإمداد')}
+              </Link>
+              <Link
+                href="/industries"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block rounded-lg px-3 py-2 text-base font-medium text-slate-700 hover:bg-white/70"
+              >
+                {t('Industries & Sectors', 'القطاعات الصناعية')}
+              </Link>
+              <Link
+                href="/partners"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block rounded-lg px-3 py-2 text-base font-medium text-slate-700 hover:bg-white/70"
+              >
+                {t('Global Partners', 'شركاؤنا العالميون')}
+              </Link>
+              <Link
+                href="/insights"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block rounded-lg px-3 py-2 text-base font-medium text-slate-700 hover:bg-slate-100"
+              >
+                {t('News & Insights', 'الأخبار والمقالات')}
+              </Link>
+              <Link
+                href="/contact"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block rounded-lg px-3 py-2 text-base font-medium text-slate-700 hover:bg-white/70"
+              >
+                {t('Contact Us', 'اتصل بنا')}
+              </Link>
+
+              <div className="flex flex-wrap gap-2 border-t border-slate-200/70 pt-3">
+                <a
+                  href={siteConfig.socials.whatsappPrimary}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-2 text-xs font-bold text-white active:scale-[0.98]"
+                >
+                  <MessageCircle className="h-4 w-4" />
+                  <span>{siteConfig.contact.mobiles[0].display}</span>
+                </a>
+                <a
+                  href={`tel:${siteConfig.contact.phoneClean}`}
+                  className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-800 active:scale-[0.98]"
+                >
+                  <Phone className="h-4 w-4 text-teal-600" />
+                  <span>{siteConfig.contact.phone}</span>
+                </a>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
 
       {/* Global RFQ modal instance */}
-      <RfqModal
-        isOpen={isRfqOpen}
-        onClose={() => setIsRfqOpen(false)}
-      />
+      <RfqModal isOpen={isRfqOpen} onClose={() => setIsRfqOpen(false)} />
     </>
   );
 };

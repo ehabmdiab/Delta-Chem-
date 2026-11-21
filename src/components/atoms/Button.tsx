@@ -28,21 +28,21 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const baseStyles =
-      'inline-flex items-center justify-center font-medium transition-all duration-200 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none active:scale-[0.98] cursor-pointer';
+      'inline-flex items-center justify-center font-medium touch-manipulation transition-[transform,box-shadow,background-color,border-color,color] duration-150 ease-out rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700 disabled:opacity-50 disabled:pointer-events-none hover:shadow-md active:scale-[0.97] active:duration-75 cursor-pointer [&_svg]:shrink-0';
 
     const variants = {
       primary:
-        'bg-slate-900 text-white hover:bg-slate-800 focus:ring-slate-900 shadow-sm border border-slate-900',
+        'bg-slate-900 text-white hover:bg-slate-800 shadow-sm border border-slate-900',
       secondary:
-        'bg-slate-100 text-slate-900 hover:bg-slate-200 focus:ring-slate-400 border border-slate-200',
+        'bg-slate-100 text-slate-900 hover:bg-slate-200 border border-slate-200',
       teal:
-        'bg-teal-600 text-white hover:bg-teal-700 focus:ring-teal-500 shadow-sm border border-teal-600',
+        'bg-teal-600 text-white hover:bg-teal-700 shadow-sm border border-teal-600',
       outline:
-        'border border-slate-300 bg-transparent text-slate-800 hover:bg-slate-50 focus:ring-slate-400',
+        'border border-slate-300 bg-transparent text-slate-800 hover:bg-slate-50',
       ghost:
-        'bg-transparent text-slate-700 hover:bg-slate-100 hover:text-slate-900 focus:ring-slate-400',
+        'bg-transparent text-slate-700 hover:bg-slate-100 hover:text-slate-900 hover:shadow-none',
       danger:
-        'bg-rose-600 text-white hover:bg-rose-700 focus:ring-rose-500 border border-rose-600',
+        'bg-rose-600 text-white hover:bg-rose-700 border border-rose-600',
     };
 
     const sizes = {
@@ -60,7 +60,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       >
         {isLoading && (
           <svg
-            className="animate-spin -ml-1 mr-2 h-4 w-4 text-current"
+            className="h-4 w-4 shrink-0 animate-spin text-current"
             fill="none"
             viewBox="0 0 24 24"
           >
@@ -79,9 +79,13 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             />
           </svg>
         )}
-        {!isLoading && leftIcon && <span className="shrink-0">{leftIcon}</span>}
-        <span>{children}</span>
-        {!isLoading && rightIcon && <span className="shrink-0">{rightIcon}</span>}
+        {!isLoading && leftIcon && (
+          <span className="inline-flex shrink-0 items-center">{leftIcon}</span>
+        )}
+        {children}
+        {!isLoading && rightIcon && (
+          <span className="inline-flex shrink-0 items-center">{rightIcon}</span>
+        )}
       </button>
     );
   }

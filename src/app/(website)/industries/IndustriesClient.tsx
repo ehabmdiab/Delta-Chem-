@@ -7,7 +7,6 @@ import {
   Sparkles,
   HeartPulse,
   Syringe,
-  Apple,
   ArrowRight,
   CheckCircle2,
 } from 'lucide-react';
@@ -20,132 +19,109 @@ import { useLanguage } from '@/components/providers/LanguageContext';
 export const IndustriesClient: React.FC = () => {
   const { t } = useLanguage();
 
-  const industries = [
+  const sectors = [
     {
-      id: 'pharmaceuticals',
-      label: t('Human Pharma', 'الدواء البشري'),
+      id: 'human',
+      label: t('Human', 'البشرية'),
       tone: 'light' as const,
-      title: t('Human Pharmaceuticals', 'الأدوية البشرية (Human Pharmaceuticals)'),
-      tagline: t('Precision APIs & Pharmacopoeial Excipients', 'مواد فعالة دقيقة وسواغ دواء مطابق للدساتير العالمية'),
+      title: t('Human Pharmaceutical Raw Materials', 'الخامات البشرية'),
+      tagline: t('APIs & Functional Excipients', 'مواد فعالة وسواغات دوائية'),
       desc: t(
-        'Formulation-grade active pharmaceutical ingredients (APIs), binders, superdisintegrants, lubricants and film coatings adhering strictly to BP, USP and Ph. Eur. standards.',
-        'مواد دوائية فعالة (APIs) ومواد رابطة ومفككات فائقة ومزلقات وأغشية تغليف أقراص مطابقة تماماً لمواصفات دساتير الأدوية البريطانية والأمريكية والأوروبية (BP, USP, Ph. Eur.).'
+        'Antibiotics, anti-inflammatory drugs, anthelmintics, and pharmaceutical excipients in standard 25kg drums and bags.',
+        'مضادات حيوية ومسكنات ومضادات ديدان وسواغات دوائية مطابقة لدساتير الأدوية العالمية.'
       ),
       icon: Pill,
-      badge: t('Core Division', 'القطاع الرئيسي'),
+      badge: t('Sector 01', 'القطاع الأول'),
       items: [
-        t('Direct Compression (DC) & Wet Granulation Excipients', 'سواغ الضغط المباشر (DC) والتحبيب الرطب'),
-        t('Antibiotics, Analgesics & Cardiovascular APIs', 'مواد فعالة للمضادات الحيوية والمسكنات وأمراض القلب'),
-        t('Controlled Release Polymers & Enteric Coatings', 'بوليمرات التحرر المضبوط والتغليف المعوي (Enteric Coating)'),
-        t('Complete Open-Part DMF and CEP Technical Dossiers', 'ملفات فنية كاملة تشمل Open-Part DMF وشهادات CEP'),
+        t('Amoxicillin Trihydrate & Clavulanate', 'أموكسيسيلين ثلاثي الهيدرات وكلافولانات'),
+        t('Paracetamol, Ibuprofen & Diclofenac', 'باراسيتامول، إيبوبروفين وديكلوفيناك'),
+        t('MCC PH 101/200, HPMC & Povidone Series', 'سليلوز دقيق التبلور، HPMC وبوفيدون'),
+        t('Starch, Dextrose, Mannitol & Lactose', 'نشا، دكستروز، مانيتول ولاكتوز'),
       ],
-      filterSlug: 'pharmaceutical-excipients',
-    },
-    {
-      id: 'nutraceuticals',
-      label: t('Nutraceuticals', 'المكملات الغذائية'),
-      tone: 'tint' as const,
-      title: t('Nutraceuticals & Dietary Supplements', 'المكملات الغذائية والمغذيات العلاجية'),
-      tagline: t('High-Bioavailability Vitamins & Active Minerals', 'فيتامينات ومعادن فعالة عالية التوافر الحيوي'),
-      desc: t(
-        'Food Chemicals Codex (FCC) and USP verified nutritional ingredients for gummies, softgels, effervescent tablets and functional beverage blends.',
-        'مكونات غذائية معتمدة وفق دستور المواد الكيميائية الغذائية (FCC) والدستور الأمريكي (USP) للحلوى الجيلاتينية والكبسولات الرخوة والأقراص الفوارة والمشروبات الوظيفية.'
-      ),
-      icon: HeartPulse,
-      badge: t('High Growth', 'نمو متسارع'),
-      items: [
-        t('Pure Vitamins (Ascorbic Acid, D3, K2, B-Complex)', 'فيتامينات نقية (حمض الأسكوربيك C، وفيتامين D3، و K2، ومجموعة B المركبة)'),
-        t('Cellular Energizers & Antioxidants (CoQ10, Resveratrol)', 'مضادات أكسدة ومحفزات خلوية (CoQ10، ريسفيراترول)'),
-        t('Direct-to-Mouth Granules & Effervescent Additives', 'حبيبات سريعة الذوبان ومواد مساعدة للأقراص الفوارة'),
-        t('Non-GMO & Heavy-Metal Tested Specifications', 'خامات غير معدلة وراثياً (Non-GMO) ومفحوصة لخلوها من المعادن الثقيلة'),
-      ],
-      filterSlug: 'nutraceutical-ingredients',
+      filterSlug: 'human-raw-materials',
     },
     {
       id: 'veterinary',
-      label: t('Veterinary', 'الطب البيطري'),
-      tone: 'light' as const,
-      title: t('Veterinary Medicines & Animal Health', 'الأدوية البيطرية وصحة الحيوان'),
-      tagline: t('Targeted Chemotherapeutics & Feed Additives', 'علاجات كيميائية مركزة وإضافات أعلاف متطورة'),
+      label: t('Veterinary', 'البيطرية'),
+      tone: 'tint' as const,
+      title: t('Veterinary Raw Materials', 'الخامات البيطرية'),
+      tagline: t('Animal Health APIs & Feed Vitamins', 'خامات الأدوية البيطرية وإضافات الأعلاف'),
       desc: t(
-        'High-potency veterinary APIs for water-soluble powders, oral suspensions, premixes and sterile injectables addressing livestock, poultry and aquaculture.',
-        'مواد فعالة بيطرية عالية الفاعلية للمساحيق القابلة للذوبان في الماء، والمعلقات الفموية، والخلطات الأولية (Premixes)، وحقن التعقيم لقطاعات الماشية والدواجن والاستزراع السمكي.'
+        'Veterinary antibiotics, quinolones, sulphonamides, and anthelmintics formulated for poultry, livestock, and aquaculture.',
+        'مضادات حيوية بيطرية وكينولون وسلفوناميدات ومضادات طفيليات وفيتامينات أعلاف.'
       ),
       icon: Syringe,
-      badge: t('Veterinary Grade', 'درجة بيطرية معتمدة'),
+      badge: t('Sector 02', 'القطاع الثاني'),
       items: [
-        t('Tylosin Tartrate, Doxycycline Hyclate, Enrofloxacin', 'تيلوزين تارترات، دوكسيسيكلين هيكلات، إنروفلوكساسين'),
-        t('High-Solubility Powders for Large-Scale Water Lines', 'مساحيق فائقة الذوبان لشبكات مياه الشرب بالمزارع الضخمة'),
-        t('Stability in Harsh Climatic & Farm Conditions', 'ثبات فائق في الظروف المناخية القاسية وبيئات المزارع'),
-        t('Full Egyptian Veterinary Authority Approvals', 'موافقات وتسجيلات كاملة من الهيئة العامة للخدمات البيطرية وهيئة الدواء'),
+        t('Tylosin Tartrate, Tylosin Phosphate & Tiamulin', 'تيلوزين طرطرات، فوسفات وتيامولين'),
+        t('Enrofloxacin, Florfenicol & Oxytetracycline', 'إنروفلوكساسين، فلورفينيكول وأوكسي تتراسيكلين'),
+        t('Sulphadimidine, Sulphaquinoxaline & Diaveridine', 'سلفاديميدين، سلفاكوينوكسالين وديافيريدين'),
+        t('Fenbendazole, Triclabendazole & Ivermectin', 'فينبيندازول، تريكلابيندازول وإيفرمكتين'),
       ],
-      filterSlug: 'veterinary-ingredients',
+      filterSlug: 'veterinary-raw-materials',
     },
     {
-      id: 'cosmeceuticals',
-      label: t('Cosmeceuticals', 'مستحضرات التجميل'),
+      id: 'cosmetics',
+      label: t('Cosmetics', 'التجميل'),
       tone: 'navy' as const,
-      image: '/images/bg-molecules.jpg',
-      title: t('Cosmeceuticals & Personal Care', 'مستحضرات التجميل العلاجية والعناية الشخصية'),
-      tagline: t('Dermatological Actives & Functional Polymers', 'مواد جلدية فعالة وبوليمرات وظيفية متقدمة'),
+      image: '/images/deltachem-supply-logistics.jpg',
+      title: t('Cosmetics Raw Materials', 'خامات مستحضرات التجميل'),
+      tagline: t('Carbomers, UV Filters & Cosmetic Bases', 'كاربومير وفلاتر شمس وقواعد تجميلية'),
       desc: t(
-        'Premium cosmetic active ingredients with proven dermal penetration, anti-aging efficacy, UV radiation shielding and deep moisturizing properties.',
-        'مكونات تجميلية نشطة متميزة ذات نفاذية جلدية مثبتة وفعالية عالية لمكافحة علامات التقدم في السن، والحماية من الأشعة فوق البنفسجية، والترطيب العميق.'
+        'Specialty thickeners, UV blocking agents, surfactants, lanolin series, emollients, and cosmetic preservatives.',
+        'كاربومير وفلاتر الأشعة فوق البنفسجية ومستحلبات ولانولين ومرطبات ومواد حافظة تجميلية.'
       ),
       icon: Sparkles,
-      badge: t('Personal Care', 'العناية الشخصية'),
+      badge: t('Sector 03', 'القطاع الثالث'),
       items: [
-        t('Multi-Molecular Sodium Hyaluronate (HA)', 'هيالورونات الصوديوم (HA) متعددة الأوزان الجزيئية'),
-        t('High-Purity Niacinamide (Low Nicotinic Acid)', 'نياسيناميد فائق النقاء (بأدنى نسبة لحمض النيكوتينيك)'),
-        t('Broad-Spectrum UV Absorbers (Octocrylene, Avobenzone)', 'فلاتر حماية واسعة الطيف من الشمس (أوكتوكريلين، أفوبنزون)'),
-        t('Microbiology Certificates & Preservative Systems', 'شهادات ميكروبيولوجية وأنظمة حفظ آمنة ومعتمدة'),
+        t('Carbomer 940, 934, 934P & 940P', 'كاربومير 940 و934 و934P و940P'),
+        t('Octyl Methoxycinnamate & Benzophenone 3', 'أوكتيل ميثوكسي سينامات وبنزوفينون 3'),
+        t('PEG Series, Tween 80/60/20, CAPB & SLES', 'بولي إيثيلين جليكول، توين، CAPB وتيكسابون'),
+        t('Lanoline, Cetostearyl Alcohol & Dexpanthenol', 'لانولين، كحول سيتوستيريل وديكسبانثينول'),
       ],
-      filterSlug: 'cosmeceuticals-ingredients',
+      filterSlug: 'cosmetics-raw-materials',
     },
     {
-      id: 'food',
-      label: t('Food & Nutrition', 'الأغذية والتغذية'),
-      tone: 'tint' as const,
-      title: t('Functional Food & Beverages', 'الأغذية الوظيفية والمشروبات المتطورة'),
-      tagline: t('FCC Compliant Stabilizers & Acidulants', 'مثبتات ومعدلات حموضة مطابقة لدستور FCC'),
+      id: 'nutraceutical',
+      label: t('Nutraceuticals', 'المكملات الغذائية'),
+      tone: 'light' as const,
+      title: t('Nutraceutical Raw Materials', 'خامات المكملات الغذائية'),
+      tagline: t('Vitamins, Gluconates & Nutritional Minerals', 'فيتامينات وجلوكونات ومعادن غذائية'),
       desc: t(
-        'Food-grade preservation agents, acidity regulators and texture hydrocolloids meeting international Food Chemicals Codex and Egyptian ISO standards.',
-        'مواد حفظ غذائية ومعدلات حموضة وغرويات مائية للقوام مطابقة لأحدث معايير دستور المواد الكيميائية الغذائية (FCC) والمواصفات القياسية المصرية.'
+        'Full spectrum of vitamins, gluconate salts, food-grade minerals, and high-intensity sweeteners.',
+        'تشكيلة متكاملة من الفيتامينات والجلوكونات والمعادن الغذائية والمحليات المعتمدة.'
       ),
-      icon: Apple,
-      badge: t('Food Grade', 'درجة غذائية معتمدة'),
+      icon: HeartPulse,
+      badge: t('Sector 04', 'القطاع الرابع'),
       items: [
-        t('Citric Acid, Sodium Benzoate, Potassium Sorbate', 'حمض الستريك، بنزوات الصوديوم، سوربات البوتاسيوم'),
-        t('Emulsifiers, Thickeners & Bulking Agents', 'مستحلبات ومثخنات قوام وعوامل زيادة الحجم'),
-        t('Halal & Kosher Certified Raw Materials', 'مواد خام حاصلة على شهادات حلال وكوشير معتمدة'),
-        t('High-Purity Granulations for Instant Drink Mixes', 'حبيبات فائقة النقاء لمزائج المشروبات سريعة التحضير'),
+        t('Ascorbic Acid (Vitamin C) — All Grades', 'فيتامين C (حمض الأسكوربيك) بجميع الدرجات'),
+        t('Vitamins A, D3, B1, B2, B6, B12 & Folic Acid', 'فيتامينات A وD3 ومجموعة B وحمض الفوليك'),
+        t('Ferrous, Calcium, Potassium & Sodium Gluconates', 'جلوكونات الحديد والكالسيوم والبوتاسيوم والصوديوم'),
+        t('Sucralose, Acesulfame K, Aspartame & Zinc Sulphate', 'سكرالوز، أسيسلفام K، أسبارتام وكبريتات الزنك'),
       ],
-      filterSlug: 'pharmaceutical-excipients',
+      filterSlug: 'nutraceutical-raw-materials',
     },
   ];
 
   return (
     <>
       {/* 1. Hero */}
-      <SectionShell label={t('Overview', 'نظرة عامة')} tone="forest" image="/images/bg-chem-powder.jpg">
-        <Reveal className="mx-auto max-w-4xl space-y-6 text-center">
+      <SectionShell label={t('Overview', 'نظرة عامة')} tone="forest" image="/images/deltachem-raw-drums.jpg">
+        <Reveal className="mx-auto max-w-3xl space-y-6 text-center">
           <SectionHeader
             onDark
             align="center"
-            eyebrow={t('Sector Expertise', 'الخبرة القطاعية المتخصصة')}
-            title={t(
-              'Targeted Ingredient Solutions Across Industrial Sectors',
-              'حلول خامات موجهة ومصممة لمختلف القطاعات الصناعية'
-            )}
+            eyebrow={t('Four Industrial Sectors', 'القطاعات الأربعة الرئيسية')}
+            title={t('Specialized Raw Materials Across Four Sectors', 'خامات متخصصة عبر أربعة قطاعات صناعية')}
             description={t(
-              'From cGMP human sterile manufacturing to dynamic cosmeceutical laboratories, DELTACHEM curates specialized chemical portfolios engineered to meet sector-specific monographs and regulatory standards.',
-              'من مصانع أدوية الحقن البشرية العقيمة المعيارية cGMP إلى مختبرات مستحضرات التجميل العلاجية، تنتقي دلتا كيم محافظ كيميائية متخصصة مصممة لتلبية دساتير ومعايير كل قطاع صناعي بدقة.'
+              'Explore DELTACHEM’s product portfolio organized across Human, Veterinary, Cosmetics, and Nutraceutical manufacturing.',
+              'تصفح خامات دلتا كيم المعتمدة لقطاعات: الخامات البشرية، البيطرية، مستحضرات التجميل، والمكملات الغذائية.'
             )}
           />
-          <div className="flex flex-wrap justify-center gap-4 pt-3">
+          <div className="flex flex-wrap justify-center gap-4 pt-2">
             <Link href="/products">
-              <Button size="lg" variant="teal" className="px-8 font-bold shadow-xl shadow-teal-950/60">
-                <span>{t('Search All Ingredients', 'البحث في كافة الخامات')}</span>
+              <Button size="lg" variant="teal" className="px-7 font-bold shadow-xl">
+                <span>{t('Browse Full List', 'عرض القائمة الكاملة')}</span>
                 <ArrowRight className="h-4 w-4 rtl:rotate-180" />
               </Button>
             </Link>
@@ -155,26 +131,20 @@ export const IndustriesClient: React.FC = () => {
                 variant="outline"
                 className="border-white/40 px-7 font-bold text-white backdrop-blur-md hover:bg-white/10"
               >
-                {t('Request Sector Catalog', 'طلب كتالوج القطاع الصناعي')}
+                {t('Request a Quote', 'طلب تسعير')}
               </Button>
             </Link>
           </div>
         </Reveal>
       </SectionShell>
 
-      {/* 2 to 6: Each sector slide */}
-      {industries.map((ind) => {
-        const Icon = ind.icon;
-        const isDark = ind.tone === 'navy';
+      {/* 2 to 5: Each of the 4 sectors */}
+      {sectors.map((sec) => {
+        const Icon = sec.icon;
+        const isDark = sec.tone === 'navy';
         return (
-          <SectionShell
-            key={ind.id}
-            id={ind.id}
-            label={ind.label}
-            tone={ind.tone}
-            image={ind.image}
-          >
-            <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-14">
+          <SectionShell key={sec.id} id={sec.id} label={sec.label} tone={sec.tone} image={sec.image}>
+            <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12">
               <Reveal className="space-y-5 lg:col-span-7">
                 <div className="flex items-center gap-3">
                   <span
@@ -191,21 +161,21 @@ export const IndustriesClient: React.FC = () => {
                         : 'border border-teal-200 bg-teal-50 text-teal-700'
                     }`}
                   >
-                    {ind.badge}
+                    {sec.badge}
                   </span>
                 </div>
 
                 <SectionHeader
                   onDark={isDark}
-                  eyebrow={ind.tagline}
-                  title={ind.title}
-                  description={ind.desc}
+                  eyebrow={sec.tagline}
+                  title={sec.title}
+                  description={sec.desc}
                 />
 
-                <ul className="grid grid-cols-1 gap-2.5 pt-2 sm:grid-cols-2">
-                  {ind.items.map((item, itemIdx) => (
+                <ul className="grid grid-cols-1 gap-3 pt-1 sm:grid-cols-2">
+                  {sec.items.map((item, idx) => (
                     <li
-                      key={itemIdx}
+                      key={idx}
                       className={`flex items-start gap-2 text-sm ${isDark ? 'text-slate-200' : 'text-slate-700'}`}
                     >
                       <CheckCircle2
@@ -217,27 +187,22 @@ export const IndustriesClient: React.FC = () => {
                 </ul>
               </Reveal>
 
-              <Reveal delay={0.15} x={30} y={0} className="lg:col-span-5">
+              <Reveal delay={0.1} x={24} y={0} className="lg:col-span-5">
                 <div
-                  className={`rounded-3xl p-7 text-center shadow-xl sm:p-9 ${
+                  className={`rounded-3xl p-7 text-center shadow-md sm:p-9 ${
                     isDark
                       ? 'border border-white/20 bg-white/10 text-white backdrop-blur-xl'
                       : 'border border-teal-200 bg-teal-50/70 text-slate-900'
                   }`}
                 >
-                  <h4 className="text-xl font-extrabold">
-                    {t(`Explore ${ind.title}`, `استكشاف ${ind.title}`)}
-                  </h4>
+                  <h4 className="text-xl font-extrabold">{sec.title}</h4>
                   <p className={`mt-2 text-xs leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-                    {t(
-                      'Access technical specifications, pharmacopoeias and request a direct quotation.',
-                      'الوصول إلى المواصفات الفنية ودساتير الأدوية وطلب عرض سعر مباشر ومخصص.'
-                    )}
+                    {t('View standards, packing options, and submit RFQ.', 'استعراض المواصفات والعبوات وطلب التسعير.')}
                   </p>
                   <div className="mt-6 space-y-3">
-                    <Link href={`/products?category=${ind.filterSlug}`} className="block">
+                    <Link href={`/divisions/${sec.filterSlug}`} className="block">
                       <Button variant="teal" size="md" className="w-full justify-between font-bold">
-                        <span>{t('Browse Sector Portfolio', 'تصفح خامات هذا القطاع')}</span>
+                        <span>{t('View Sector Catalog', 'عرض خامات القطاع')}</span>
                         <ArrowRight className="h-4 w-4 rtl:rotate-180" />
                       </Button>
                     </Link>
@@ -251,7 +216,7 @@ export const IndustriesClient: React.FC = () => {
                             : 'border-slate-300 text-slate-800 hover:bg-white'
                         }`}
                       >
-                        {t('Request Custom Quote', 'طلب عرض سعر مخصص')}
+                        {t('Request Custom Quote', 'طلب عرض سعر')}
                       </Button>
                     </Link>
                   </div>
@@ -261,41 +226,6 @@ export const IndustriesClient: React.FC = () => {
           </SectionShell>
         );
       })}
-
-      {/* 7. Bottom CTA */}
-      <SectionShell label={t('Inquire', 'طلب استفسار')} tone="forest" image="/images/bg-cairo-dusk.jpg">
-        <Reveal className="mx-auto max-w-4xl space-y-6 py-6 text-center">
-          <SectionHeader
-            onDark
-            align="center"
-            eyebrow={t('Consolidated Sourcing', 'توريد واستيراد مجمع متعدد القطاعات')}
-            title={t(
-              'Need a Multi-Industry Raw Material Solution?',
-              'هل تحتاج إلى حلول توريد خامات لمصانع متعددة الأنشطة؟'
-            )}
-            description={t(
-              'Our technical sourcing team coordinates consolidated shipments combining excipients, APIs and vitamins under a unified commercial agreement.',
-              'ينسق فريق التوريد الفني لدينا شحنات مجمعة تجمع بين السواغ الدوائي والمواد الفعالة والفيتامينات بموجب اتفاقية تجارية موحدة وميسرة.'
-            )}
-          />
-          <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
-            <Link href="/request-a-quote">
-              <Button size="lg" variant="teal" className="px-9 font-extrabold shadow-xl shadow-teal-950/50">
-                {t('Submit an RFQ', 'إرسال طلب تسعير (RFQ)')}
-              </Button>
-            </Link>
-            <Link href="/contact">
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-white/50 px-8 font-bold text-white hover:bg-white/10"
-              >
-                {t('Contact Sales Team', 'التواصل مع فريق المبيعات')}
-              </Button>
-            </Link>
-          </div>
-        </Reveal>
-      </SectionShell>
     </>
   );
 };

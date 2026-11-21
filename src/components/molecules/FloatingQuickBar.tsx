@@ -1,23 +1,22 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { RfqModal } from '@/components/molecules/RfqModal';
-import { Sparkles, Phone, ArrowUp } from 'lucide-react';
+import { siteConfig } from '@/config/site';
+import { SPRING_SNAPPY, CROSSFADE_REDUCED } from '@/lib/motion';
+import { Sparkles, Phone, ArrowUp, MessageCircle } from 'lucide-react';
 import { useLanguage } from '@/components/providers/LanguageContext';
 
 export const FloatingQuickBar: React.FC = () => {
   const { t } = useLanguage();
+  const reduceMotion = useReducedMotion();
   const [isVisible, setIsVisible] = useState(false);
   const [isRfqOpen, setIsRfqOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 350) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
+      setIsVisible(window.scrollY > 350);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -25,7 +24,7 @@ export const FloatingQuickBar: React.FC = () => {
   }, []);
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
   };
 
   return (
@@ -33,38 +32,42 @@ export const FloatingQuickBar: React.FC = () => {
       <AnimatePresence>
         {isVisible && (
           <motion.div
-            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 18, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 30, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 rtl:right-auto rtl:left-6"
+            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 18, scale: 0.96 }}
+            transition={reduceMotion ? CROSSFADE_REDUCED : SPRING_SNAPPY}
+            className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 rtl:left-6 rtl:right-auto"
           >
             {/* Quick RFQ Capsule */}
             <button
               type="button"
               onClick={() => setIsRfqOpen(true)}
-              className="group flex items-center gap-2.5 px-4 py-3 rounded-full bg-slate-900/90 hover:bg-slate-900 text-white border border-teal-500/50 shadow-2xl backdrop-blur-xl transition-all hover:scale-105 cursor-pointer"
+              className="group flex cursor-pointer items-center gap-2 rounded-full border border-teal-400/40 bg-slate-900 px-4 py-3 text-white shadow-2xl transition-transform hover:scale-[1.03] hover:bg-slate-800 active:scale-95"
             >
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-teal-400"></span>
-              </span>
-              <Sparkles className="w-4 h-4 text-teal-400 group-hover:rotate-12 transition-transform" />
-              <span className="text-xs sm:text-sm font-bold tracking-tight">
-                {t('Quick RFQ', 'طلب تسعير سريع')}
-              </span>
-              <span className="hidden sm:inline-block text-[11px] font-mono px-2 py-0.5 rounded-full bg-teal-950 text-teal-300 border border-teal-800">
-                {t('24h SLA', 'خلال ٢٤ ساعة')}
+              <Sparkles className="h-4 w-4 text-teal-400 transition-transform group-hover:rotate-12" />
+              <span className="text-xs font-bold tracking-tight sm:text-sm">
+                {t('Quick RFQ', 'طلب تسعير')}
               </span>
             </button>
 
-            {/* Direct Phone Call Button */}
+            {/* Direct WhatsApp Button */}
             <a
-              href="tel:+20226988187"
-              title={t('Call Cairo Procurement Desk', 'اتصل بمكتب المشتريات بالقاهرة')}
-              className="p-3 rounded-full bg-slate-900/90 hover:bg-slate-900 text-teal-400 hover:text-white border border-slate-700 shadow-xl backdrop-blur-xl transition-all hover:scale-105 cursor-pointer flex items-center justify-center"
+              href={siteConfig.socials.whatsappPrimary}
+              target="_blank"
+              rel="noopener noreferrer"
+              title={t('WhatsApp Sales (01003875503)', 'واتساب المبيعات (01003875503)')}
+              className="flex cursor-pointer items-center justify-center rounded-full border border-emerald-400/60 bg-emerald-600 p-3 text-white shadow-xl transition-transform hover:scale-[1.05] hover:bg-emerald-500 active:scale-95"
             >
-              <Phone className="w-4 h-4" />
+              <MessageCircle className="h-4 w-4" />
+            </a>
+
+            {/* Direct Landline Call Button */}
+            <a
+              href={`tel:${siteConfig.contact.phoneClean}`}
+              title={t('Call Landline (0226988187)', 'اتصل بالأرضي (0226988187)')}
+              className="flex cursor-pointer items-center justify-center rounded-full border border-slate-700 bg-slate-900 p-3 text-teal-400 shadow-xl transition-transform hover:scale-[1.05] hover:bg-slate-800 hover:text-white active:scale-95"
+            >
+              <Phone className="h-4 w-4" />
             </a>
 
             {/* Back to top button */}
@@ -72,9 +75,9 @@ export const FloatingQuickBar: React.FC = () => {
               type="button"
               onClick={scrollToTop}
               title={t('Scroll to Top', 'العودة للأعلى')}
-              className="p-3 rounded-full bg-slate-900/90 hover:bg-slate-900 text-slate-300 hover:text-white border border-slate-700 shadow-xl backdrop-blur-xl transition-all hover:scale-105 cursor-pointer flex items-center justify-center"
+              className="flex cursor-pointer items-center justify-center rounded-full border border-slate-700 bg-slate-900 p-3 text-slate-300 shadow-xl transition-transform hover:scale-[1.05] hover:bg-slate-800 hover:text-white active:scale-95"
             >
-              <ArrowUp className="w-4 h-4" />
+              <ArrowUp className="h-4 w-4" />
             </button>
           </motion.div>
         )}

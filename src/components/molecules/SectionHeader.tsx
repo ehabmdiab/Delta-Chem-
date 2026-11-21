@@ -11,7 +11,7 @@ interface SectionHeaderProps {
   children?: React.ReactNode;
 }
 
-/** Arshine-style section title: tracked eyebrow with rule, big display heading, readable lead. */
+/** Clean, spacious section header with optical typography and bilingual tracking. */
 export const SectionHeader: React.FC<SectionHeaderProps> = ({
   eyebrow,
   title,
@@ -22,10 +22,10 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
   children,
 }) => (
   <div
-    className={`flex flex-col gap-3 ${align === 'center' ? 'items-center text-center' : 'items-start'} ${className}`}
+    className={`flex flex-col gap-3.5 ${align === 'center' ? 'items-center text-center' : 'items-start'} ${className}`}
   >
     <span
-      className={`inline-flex items-center gap-3 text-xs font-extrabold uppercase tracking-[0.22em] ${
+      className={`inline-flex items-center gap-3 text-xs font-extrabold uppercase tracking-[0.16em] rtl:normal-case rtl:tracking-normal ${
         onDark ? 'text-teal-400' : 'text-teal-600'
       }`}
     >
@@ -34,7 +34,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
     </span>
 
     <h2
-      className={`text-[clamp(1.75rem,3.1vw,3.25rem)] font-extrabold leading-[1.1] tracking-tight ${
+      className={`text-[clamp(1.65rem,1.2rem+1.8vw,2.75rem)] font-extrabold leading-[1.15] tracking-tight rtl:tracking-normal ${
         onDark ? 'text-white' : 'text-slate-900'
       }`}
     >
@@ -43,8 +43,8 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
 
     {description && (
       <p
-        className={`max-w-3xl text-base leading-relaxed lg:text-lg ${
-          onDark ? 'text-slate-300' : 'text-slate-600'
+        className={`max-w-2xl text-base leading-relaxed lg:text-lg ${
+          onDark ? 'text-slate-200' : 'text-slate-600'
         }`}
       >
         {description}

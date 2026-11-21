@@ -12,31 +12,31 @@ import { HomeSectionsClient } from '@/components/organisms/HomeSectionsClient';
 export default async function HomePage() {
   const { products: featuredProducts } = await dataStore.getProducts({
     isFeatured: true,
-    limit: 6,
+    limit: 8,
   });
   const articles = await dataStore.getArticles({ limit: 3 });
 
   return (
     <>
-      {/* 1. Hero banner swiper */}
+      {/* 1. Hero banner */}
       <HeroCarousel />
 
-      {/* 2. About + live credentials + ticker */}
+      {/* 2. About + live credentials */}
       <HomeAbout />
 
-      {/* 3. Divisions horizontal swiper */}
+      {/* 3. Four real raw material sectors */}
       <ArshineProductCarousel />
 
-      {/* 4. Featured products rail */}
+      {/* 4. Featured products across the 4 sectors */}
       <FeaturedProductsRail products={featuredProducts} />
 
       {/* 5. Dual commercial operating frameworks */}
       <CommercialModelSwitcher />
 
-      {/* 6. Harvest Pharma Cairo hub */}
+      {/* 6. Harvest Pharma storage hub */}
       <WarehouseTelemetryCard />
 
-      {/* 7, 8, 9: Quality, Insights & Contact sections (fully bilingual client component) */}
+      {/* 7, 8, 9: Quality, Insights & Contact CTA */}
       <HomeSectionsClient articles={articles} />
 
       <FloatingQuickBar />

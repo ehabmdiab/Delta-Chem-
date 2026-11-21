@@ -93,22 +93,23 @@ describe('Admin Operations & Store Management', () => {
 
   it('should update and retrieve site settings', async () => {
     const settings = await dataStore.getSiteSettings();
-    expect(settings.company_info.telephone).toBe('(202) 26988187');
+    const originalTelephone = settings.company_info.telephone;
+    expect(originalTelephone).toBe('0226988187 / 0226988217');
 
     const updated = await dataStore.updateSiteSettings({
       company_info: {
         ...settings.company_info,
-        telephone: '(202) 26988188',
+        telephone: '0226988188',
       },
     });
 
-    expect(updated.company_info.telephone).toBe('(202) 26988188');
+    expect(updated.company_info.telephone).toBe('0226988188');
 
     // Restore original telephone
     await dataStore.updateSiteSettings({
       company_info: {
         ...settings.company_info,
-        telephone: '(202) 26988187',
+        telephone: originalTelephone,
       },
     });
   });

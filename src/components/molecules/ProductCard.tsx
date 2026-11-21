@@ -2,95 +2,70 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { motion } from 'motion/react';
 import { Product } from '@/types';
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
 import { RfqModal } from '@/components/molecules/RfqModal';
 import { useLanguage } from '@/components/providers/LanguageContext';
-import { ArrowRight, CheckCircle2, Warehouse, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 
 export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
   const { t } = useLanguage();
   const [isRfqOpen, setIsRfqOpen] = useState(false);
 
-  const isHarvestStored = product.availability_status.toLowerCase().includes('harvest');
-
   return (
     <>
-      <motion.div
-        whileHover={{ y: -4 }}
-        transition={{ duration: 0.2 }}
-        className="group relative bg-white rounded-2xl border border-slate-200/90 hover:border-teal-500/80 p-6 transition-all duration-300 hover:shadow-xl flex flex-col justify-between"
-      >
+      <div className="group flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-0.5 hover:border-teal-500/80 hover:shadow-[0_12px_32px_-12px_rgba(15,31,24,0.14)]">
         <div>
-          {/* Top category & CAS badges */}
-          <div className="flex flex-wrap items-center justify-between gap-2 mb-3.5">
+          {/* Category & Subgroup tags */}
+          <div className="mb-3.5 flex flex-wrap items-center justify-between gap-2">
             {product.category && (
               <Badge variant="teal" size="sm" className="font-bold">
                 {t(product.category.name, product.category.name_ar)}
               </Badge>
             )}
             {product.cas_number && (
-              <span className="text-xs font-mono font-semibold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-md border border-slate-200">
+              <span className="rounded-md border border-slate-200 bg-slate-100 px-2.5 py-1 font-mono text-xs font-semibold text-slate-600">
                 CAS {product.cas_number}
               </span>
             )}
           </div>
 
-          {/* Product Title - Scale up for impact */}
-          <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 group-hover:text-teal-700 transition-colors line-clamp-2 mb-2.5">
+          {/* Product Title */}
+          <h3 className="mb-2 text-lg font-extrabold leading-snug text-slate-900 transition-colors group-hover:text-teal-700 sm:text-xl">
             <Link href={`/products/${product.slug}`} className="hover:underline">
               {t(product.name, product.name_ar)}
             </Link>
           </h3>
 
-          {/* Description snippet */}
-          <p className="text-xs sm:text-sm text-slate-600 line-clamp-2 mb-5 leading-relaxed font-normal">
+          {/* Concise 1-2 line description */}
+          <p className="mb-5 line-clamp-2 text-sm leading-relaxed text-slate-600">
             {t(product.description || '', product.description_ar)}
           </p>
 
-          {/* Technical Specs Box */}
-          <div className="space-y-2 py-3.5 px-3 bg-slate-50/80 rounded-xl border border-slate-100 text-xs mb-4">
+          {/* Compact Technical Specs */}
+          <div className="mb-5 space-y-2 rounded-xl border border-slate-100 bg-slate-50/80 p-3.5 text-xs">
             {product.pharmacopoeia_standards && (
-              <div className="flex items-center justify-between">
-                <span className="text-slate-500 font-medium">{t('Standard:', 'المعيار:')}</span>
-                <span className="font-bold text-slate-900 bg-white px-2 py-0.5 rounded shadow-2xs border border-slate-200/60">
+              <div className="flex items-center justify-between gap-3">
+                <span className="font-medium text-slate-500">{t('Standard:', 'الدستور:')}</span>
+                <span className="rounded border border-slate-200/70 bg-white px-2 py-0.5 text-right font-bold text-slate-900">
                   {product.pharmacopoeia_standards}
                 </span>
               </div>
             )}
-            {product.grade_spec && (
-              <div className="flex items-center justify-between">
-                <span className="text-slate-500 font-medium">{t('Grade:', 'الدرجة:')}</span>
-                <span className="font-semibold text-slate-800">{product.grade_spec}</span>
-              </div>
-            )}
             {product.packaging && (
-              <div className="flex items-center justify-between">
-                <span className="text-slate-500 font-medium">{t('Packaging:', 'التعبئة:')}</span>
-                <span className="text-slate-700 font-mono truncate max-w-[170px]">{product.packaging}</span>
+              <div className="flex items-center justify-between gap-3">
+                <span className="font-medium text-slate-500">{t('Packing:', 'التعبئة:')}</span>
+                <span className="truncate font-mono font-semibold text-slate-700" title={product.packaging}>
+                  {product.packaging}
+                </span>
               </div>
             )}
-          </div>
-
-          {/* Availability note */}
-          <div className="mb-5">
-            {isHarvestStored ? (
-              <div className="flex items-center gap-2 text-xs font-semibold text-teal-800 bg-teal-50 p-2.5 rounded-lg border border-teal-200">
-                <Warehouse className="w-4 h-4 text-teal-600 shrink-0" />
-                <span>{t('Local Stock at Harvest Pharma Cairo Hub', 'مخزون محلي بمستودعات هارفست فارما')}</span>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
-                <CheckCircle2 className="w-4 h-4 text-slate-400 shrink-0" />
-                <span>
-                  {t(
-                    product.availability_status,
-                    product.availability_status.toLowerCase().includes('indent')
-                      ? 'توريد واستيراد مباشر خلال ١٠-١٤ يوماً'
-                      : 'متوفر عند الطلب'
-                  )}
+            {product.application && (
+              <div className="flex items-center justify-between gap-3">
+                <span className="font-medium text-slate-500">{t('Group:', 'التصنيف:')}</span>
+                <span className="truncate font-medium text-slate-700" title={product.application}>
+                  {product.application}
                 </span>
               </div>
             )}
@@ -98,25 +73,25 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
         </div>
 
         {/* Action Buttons */}
-        <div className="pt-3 flex items-center gap-2.5 border-t border-slate-100">
+        <div className="flex items-center gap-2.5 border-t border-slate-100 pt-4">
           <Button
             variant="teal"
             size="md"
-            className="flex-1 text-xs sm:text-sm font-bold min-h-[44px]"
+            className="min-h-[44px] flex-1 text-sm font-bold"
             onClick={() => setIsRfqOpen(true)}
           >
-            <Sparkles className="w-3.5 h-3.5 mr-1" />
-            {t('Request RFQ', 'طلب تسعير ومواصفات')}
+            <Sparkles className="h-3.5 w-3.5" />
+            {t('Request RFQ', 'طلب تسعير')}
           </Button>
           <Link
             href={`/products/${product.slug}`}
-            className="inline-flex items-center justify-center p-2.5 rounded-lg border border-slate-200 text-slate-700 hover:text-teal-700 hover:bg-slate-50 transition min-h-[44px] min-w-[44px]"
-            title={t('View Technical Monograph', 'عرض المواصفات الفنية')}
+            className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg border border-slate-200 p-2.5 text-slate-700 transition hover:bg-slate-50 hover:text-teal-700 active:scale-95"
+            title={t('View Specifications', 'عرض المواصفات')}
           >
-            <ArrowRight className="w-4 h-4 rtl:rotate-180" />
+            <ArrowRight className="h-4 w-4 rtl:rotate-180" />
           </Link>
         </div>
-      </motion.div>
+      </div>
 
       <RfqModal
         isOpen={isRfqOpen}
@@ -124,7 +99,7 @@ export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
         prefilledProduct={{
           id: product.id,
           name: product.name,
-          grade: product.grade_spec,
+          grade: product.pharmacopoeia_standards || product.grade_spec,
         }}
       />
     </>

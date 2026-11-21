@@ -26,15 +26,13 @@ const TONE_BASE: Record<SectionTone, string> = {
 const TONE_OVERLAY: Record<SectionTone, string> = {
   light: 'bg-white/92',
   tint: 'bg-teal-50/92',
-  dark: 'bg-gradient-to-r from-slate-950/95 via-slate-950/80 to-slate-950/50',
-  forest: 'bg-gradient-to-r from-teal-950/95 via-teal-900/85 to-teal-800/55',
-  navy: 'bg-gradient-to-r from-sky-950/95 via-sky-900/85 to-sky-800/55',
+  dark: 'bg-gradient-to-r from-slate-950/92 via-slate-950/80 to-slate-950/55',
+  forest: 'bg-gradient-to-r from-teal-950/92 via-teal-900/82 to-teal-800/60',
+  navy: 'bg-gradient-to-r from-sky-950/92 via-sky-900/82 to-sky-800/60',
 };
 
 /**
- * One full-screen "slide" of the page carousel.
- * Server-compatible - the snapping itself is handled by CSS (see globals.css)
- * and <SnapMode /> which toggles it per route.
+ * Clean, airy section wrapper with generous whitespace.
  */
 export const SectionShell: React.FC<SectionShellProps> = ({
   id,
@@ -63,17 +61,13 @@ export const SectionShell: React.FC<SectionShellProps> = ({
 
       {isDarkTone && (
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-          <div
-            className="absolute -right-24 -top-24 h-[28rem] w-[28rem] rounded-full bg-teal-400/10 blur-3xl"
-          />
-          <div
-            className="absolute -bottom-32 -left-24 h-[24rem] w-[24rem] rounded-full bg-amber-500/5 blur-3xl"
-          />
+          <div className="absolute -right-24 -top-24 h-[28rem] w-[28rem] rounded-full bg-teal-400/10 blur-3xl" />
+          <div className="absolute -bottom-32 -left-24 h-[24rem] w-[24rem] rounded-full bg-amber-500/5 blur-3xl" />
         </div>
       )}
 
       <div
-        className={`relative my-auto mx-auto w-full max-w-[1720px] px-4 py-6 sm:px-8 sm:py-8 lg:px-14 lg:py-8 xl:px-20 ${innerClassName}`}
+        className={`relative mx-auto w-full max-w-[1440px] px-5 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-24 ${innerClassName}`}
       >
         {children}
       </div>

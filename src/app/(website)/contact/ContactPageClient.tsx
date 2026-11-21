@@ -1,17 +1,20 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import {
   MapPin,
   Phone,
   Mail,
   Clock,
-  Warehouse,
   ExternalLink,
+  MessageCircle,
+  Smartphone,
 } from 'lucide-react';
 import { SectionShell } from '@/components/molecules/SectionShell';
 import { SectionHeader } from '@/components/molecules/SectionHeader';
 import { Reveal } from '@/components/molecules/Reveal';
+import { Button } from '@/components/atoms/Button';
 import { SITE_CONFIG } from '@/config/site';
 import { useLanguage } from '@/components/providers/LanguageContext';
 import { ContactClient } from './ContactClient';
@@ -23,81 +26,122 @@ export const ContactPageClient: React.FC = () => {
     <>
       {/* 1. Contact Hero */}
       <SectionShell label={t('Overview', 'نظرة عامة')} tone="forest" image="/images/bg-cairo-dusk.jpg">
-        <Reveal className="mx-auto max-w-4xl space-y-6 text-center">
+        <Reveal className="mx-auto max-w-3xl space-y-5 text-center">
           <SectionHeader
             onDark
             align="center"
-            eyebrow={t('Direct B2B Communication', 'قنوات اتصال وتواصل مباشر (B2B)')}
-            title={t(
-              'Connect with Our Technical & Sales Specialists',
-              'تواصل مع خبرائنا الفنيين وفريق المبيعات'
-            )}
+            eyebrow={t('Direct B2B Contact', 'التواصل المباشر')}
+            title={t('Connect with DELTACHEM Cairo', 'تواصل مع شركة دلتا كيم')}
             description={t(
-              'Headquartered in Cairo, Egypt, DELTACHEM supports formulators, procurement executives and regulatory managers across the pharmaceutical and chemical sectors.',
-              'يقع مقرنا الرئيسي في القاهرة، مصر، وتدعم دلتا كيم مسؤولي الصياغة الدوائية، ومديري المشتريات، ومديري الشؤون التنظيمية عبر قطاعات الأدوية والكيماويات.'
+              'Reach our Cairo Head Office by phone, WhatsApp, or email for raw material quotations and inquiries.',
+              'تواصل مع مقرنا الرئيسي بالقاهرة عبر الهاتف أو واتساب أو البريد الإلكتروني لطلبات التسعير والاستفسارات.'
             )}
           />
         </Reveal>
       </SectionShell>
 
       {/* 2. Direct Channels & Interactive Form */}
-      <SectionShell label={t('Inquire', 'طلب استفسار')} tone="light">
+      <SectionShell label={t('Contact', 'بيانات التواصل')} tone="light">
         <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12 lg:gap-12">
-          {/* Left Column: Direct Corporate Details */}
+          {/* Left Column: Official Head Office & Channels */}
           <Reveal className="space-y-6 lg:col-span-5">
             <div className="rounded-3xl border border-teal-200 bg-teal-50 p-6 shadow-sm sm:p-8">
               <span className="inline-block rounded-md border border-teal-200 bg-white px-3 py-1 text-xs font-bold uppercase tracking-wider text-teal-700">
-                {t('Executive Headquarters', 'المقر الإداري والتنفيذي')}
+                {t('Head Office', 'المقر الرئيسي')}
               </span>
               <h3 className="mt-2 text-2xl font-extrabold text-slate-900">
-                {t('Cairo Head Office', 'المقر الرئيسي - القاهرة')}
+                {t('DELTACHEM Cairo', 'دلتا كيم — القاهرة')}
               </h3>
-              <p className="mt-1 text-xs text-slate-600">
-                {t(
-                  'Direct commercial inquiries, indent representation and contract administration.',
-                  'استفسارات تجارية مباشرة، تمثيل الوكالات التجارية، وإدارة العقود والتوريد.'
-                )}
-              </p>
 
-              <div className="mt-5 space-y-4 text-sm text-slate-700">
+              <div className="mt-6 space-y-5 text-sm text-slate-700">
+                {/* Address */}
                 <div className="flex items-start gap-3.5">
-                  <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-teal-600 text-white shadow-sm">
+                  <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-teal-600 text-white shadow-xs">
                     <MapPin className="h-4 w-4" />
                   </div>
                   <div>
-                    <span className="block text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                      {t('Physical Address', 'العنوان الفعلي')}
+                    <span className="block text-xs font-bold uppercase tracking-wider text-slate-500">
+                      {t('Head Office Address', 'عنوان المقر الرئيسي')}
                     </span>
-                    <span className="font-extrabold text-slate-900 leading-snug">
+                    <span className="font-bold leading-snug text-slate-900">
                       {locale === 'ar' ? SITE_CONFIG.contact.address_ar : SITE_CONFIG.contact.address}
                     </span>
                   </div>
                 </div>
 
+                {/* Landlines */}
                 <div className="flex items-start gap-3.5">
-                  <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-teal-600 text-white shadow-sm">
+                  <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-teal-600 text-white shadow-xs">
                     <Phone className="h-4 w-4" />
                   </div>
                   <div>
-                    <span className="block text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                      {t('Direct Phone (Cairo)', 'الهاتف المباشر (القاهرة)')}
+                    <span className="block text-xs font-bold uppercase tracking-wider text-slate-500">
+                      {t('Landline Numbers', 'أرقام التليفون الأرضي')}
                     </span>
-                    <a
-                      href={`tel:${SITE_CONFIG.contact.phone.replace(/[^0-9]/g, '')}`}
-                      className="font-extrabold text-slate-900 hover:text-teal-700"
-                    >
-                      {SITE_CONFIG.contact.phone}
-                    </a>
+                    <div className="mt-1 flex flex-wrap items-center gap-2 font-mono font-extrabold text-slate-900">
+                      {SITE_CONFIG.contact.landlines.map((line, i) => (
+                        <React.Fragment key={line.display}>
+                          <a href={`tel:${line.tel}`} className="hover:text-teal-700 hover:underline">
+                            {line.display}
+                          </a>
+                          {i === 0 && <span className="text-slate-400">/</span>}
+                        </React.Fragment>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
+                {/* Mobiles & WhatsApp */}
                 <div className="flex items-start gap-3.5">
-                  <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-teal-600 text-white shadow-sm">
+                  <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-xs">
+                    <MessageCircle className="h-4 w-4" />
+                  </div>
+                  <div className="w-full space-y-2.5">
+                    <span className="block text-xs font-bold uppercase tracking-wider text-slate-500">
+                      {t('Mobile & WhatsApp', 'الموبايل والتواصل عبر واتساب')}
+                    </span>
+                    {SITE_CONFIG.contact.mobiles.map((mob) => (
+                      <div
+                        key={mob.display}
+                        className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-teal-200 bg-white p-2.5 shadow-2xs"
+                      >
+                        <a
+                          href={`tel:${mob.tel}`}
+                          className="inline-flex items-center gap-1.5 font-mono text-sm font-extrabold text-slate-900 hover:text-teal-700"
+                        >
+                          <Smartphone className="h-4 w-4 text-teal-600" />
+                          <span>{mob.display}</span>
+                        </a>
+                        <div className="flex items-center gap-1.5">
+                          <a
+                            href={`tel:${mob.tel}`}
+                            className="rounded-lg border border-slate-200 px-2.5 py-1 text-xs font-bold text-slate-700 transition hover:bg-slate-50"
+                          >
+                            {t('Call', 'اتصال')}
+                          </a>
+                          <a
+                            href={mob.whatsapp}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 rounded-lg bg-emerald-600 px-2.5 py-1 text-xs font-bold text-white transition hover:bg-emerald-500"
+                          >
+                            <MessageCircle className="h-3.5 w-3.5" />
+                            <span>{t('WhatsApp', 'واتساب')}</span>
+                          </a>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Email */}
+                <div className="flex items-start gap-3.5">
+                  <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-teal-600 text-white shadow-xs">
                     <Mail className="h-4 w-4" />
                   </div>
                   <div>
-                    <span className="block text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                      {t('Sales & Quotation Desk', 'مكتب المبيعات والتسعير')}
+                    <span className="block text-xs font-bold uppercase tracking-wider text-slate-500">
+                      {t('Sales & Quotations Email', 'البريد الإلكتروني للمبيعات')}
                     </span>
                     <a
                       href={`mailto:${SITE_CONFIG.contact.salesEmail}`}
@@ -108,46 +152,62 @@ export const ContactPageClient: React.FC = () => {
                   </div>
                 </div>
 
+                {/* Working Hours */}
                 <div className="flex items-start gap-3.5">
-                  <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-teal-600 text-white shadow-sm">
+                  <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-teal-600 text-white shadow-xs">
                     <Clock className="h-4 w-4" />
                   </div>
                   <div>
-                    <span className="block text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                      {t('Official Business Hours', 'مواعيد العمل الرسمية')}
+                    <span className="block text-xs font-bold uppercase tracking-wider text-slate-500">
+                      {t('Business Hours', 'مواعيد العمل')}
                     </span>
-                    <span className="font-extrabold text-slate-900">
-                      {locale === 'ar' ? SITE_CONFIG.contact.workingHours_ar : SITE_CONFIG.contact.workingHours}
+                    <span className="font-bold text-slate-900">
+                      {locale === 'ar'
+                        ? SITE_CONFIG.contact.workingHours_ar
+                        : SITE_CONFIG.contact.workingHours}
                     </span>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Sister Company Warehouse Card */}
-            <div className="rounded-3xl border border-teal-800 bg-teal-950 p-6 text-white shadow-md sm:p-7">
-              <div className="mb-2 flex items-center gap-2">
-                <Warehouse className="h-4 w-4 text-teal-400" />
-                <span className="text-[11px] font-bold uppercase tracking-wider text-teal-400">
-                  {t('Warehousing & Logistics', 'المستودعات والخدمات اللوجستية')}
-                </span>
+            {/* Harvest Pharma Sister Company Card */}
+            <div className="overflow-hidden rounded-3xl border border-teal-800 bg-teal-950 text-white shadow-md">
+              <div className="relative h-36 w-full">
+                <Image
+                  src="/images/harvest-warehouse-1.webp"
+                  alt="Harvest Pharma Warehouse"
+                  fill
+                  sizes="(min-width:1024px) 40vw, 100vw"
+                  className="object-cover"
+                />
               </div>
-              <h4 className="text-lg font-extrabold">
-                {t('Harvest Pharma Alliance', 'تحالف هارفست فارما الشقيقة')}
-              </h4>
-              <p className="mt-1 text-xs leading-relaxed text-slate-300">
-                {t(
-                  'GDP warehousing in Cairo. Buffer storage, cold chain 2°C–8°C and express nationwide dispatch.',
-                  'مستودعات مطابقة لممارسات GDP في القاهرة. تخزين أمان استراتيجي، سلسلة تبريد 2°C–8°C، وشحن سريع لجميع أنحاء الجمهورية.'
-                )}
-              </p>
-              <div className="mt-4 flex items-center justify-between border-t border-teal-800/80 pt-3 text-xs">
-                <span className="text-slate-400">{t('Sister Entity Portal:', 'بوابة الكيان الشقيق:')}</span>
+              <div className="space-y-3 p-6">
+                <div className="flex items-center gap-3">
+                  <div className="rounded-lg bg-white p-1.5">
+                    <Image
+                      src="/images/logo-harvest-pharma.png"
+                      alt="Harvest Pharma"
+                      width={557}
+                      height={525}
+                      className="h-8 w-8 object-contain"
+                    />
+                  </div>
+                  <h4 className="text-base font-extrabold">
+                    {t('Harvest Pharma Warehousing', 'شركة هارفست فارما الشقيقة')}
+                  </h4>
+                </div>
+                <p className="text-xs leading-relaxed text-slate-300">
+                  {t(
+                    'GDP-compliant cold and ambient pharmaceutical warehousing for local buffer inventory.',
+                    'مخازن دوائية معتمدة ومضبوطة الحرارة لتخزين الخامات وتوريدها للمصانع.'
+                  )}
+                </p>
                 <a
-                  href="https://www.harvestpharma-eg.com"
+                  href={SITE_CONFIG.contact.warehouseUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 font-bold text-teal-400 hover:text-white"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-teal-400 hover:text-white"
                 >
                   <span>www.harvestpharma-eg.com</span>
                   <ExternalLink className="h-3.5 w-3.5" />
@@ -156,36 +216,50 @@ export const ContactPageClient: React.FC = () => {
             </div>
           </Reveal>
 
-          {/* Right Column: Contact Client Interactive Form */}
-          <Reveal delay={0.15} x={30} y={0} className="lg:col-span-7">
+          {/* Right Column: Contact Form */}
+          <Reveal delay={0.12} x={24} y={0} className="lg:col-span-7">
             <ContactClient />
           </Reveal>
         </div>
       </SectionShell>
 
-      {/* 3. Location & Accessibility */}
-      <SectionShell label={t('Location', 'الموقع الجغرافي')} tone="tint">
-        <Reveal className="mx-auto max-w-4xl space-y-5 text-center">
-          <SectionHeader
-            align="center"
-            eyebrow={t('Gesr El-Suez Hub', 'مركز جسر السويس اللوجستي')}
-            title={t('Visiting Our Cairo Executive Office', 'زيارة مقرنا الإداري والتنفيذي بالقاهرة')}
-            description={t(
-              'Our headquarters is centrally situated in Gesr El-Suez, Cairo, providing streamlined access to Cairo International Airport and major industrial highways connecting Obour, 10th of Ramadan and 6th of October.',
-              'يقع مقرنا الرئيسي في موقع متميز بجسر السويس بالقاهرة، مما يوفر وصولاً سلساً لمطار القاهرة الدولي والمحاور الصناعية الكبرى التي تربط العبور، والعاشر من رمضان، والسادس من أكتوبر.'
-            )}
-          />
-          <div className="pt-2">
-            <div className="inline-flex items-center gap-2 rounded-2xl border border-teal-200 bg-white px-6 py-3.5 text-sm font-extrabold text-slate-900 shadow-md">
-              <MapPin className="h-5 w-5 text-teal-600" />
-              <span>
-                {locale === 'ar'
-                  ? '66 شارع جمال الدين زكي، جسر السويس، القاهرة، جمهورية مصر العربية'
-                  : '66 Gamal El-Deen Zaki st, Gesr El-Suez, Cairo, Egypt'}
-              </span>
-            </div>
+      {/* 3. Location & Embedded Google Map */}
+      <SectionShell label={t('Map & Location', 'الموقع على الخريطة')} tone="tint">
+        <div className="space-y-8">
+          <div className="flex flex-col items-start justify-between gap-5 md:flex-row md:items-end">
+            <SectionHeader
+              eyebrow={t('Headquarters Map', 'الموقع الجغرافي الدقيق')}
+              title={t('Visit Our Cairo Head Office', 'موقع المقر الرئيسي — جسر السويس، القاهرة')}
+              description={t(
+                SITE_CONFIG.contact.address,
+                SITE_CONFIG.contact.address_ar
+              )}
+            />
+            <a
+              href={SITE_CONFIG.contact.mapsDirectUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="shrink-0"
+            >
+              <Button variant="teal" size="md" className="font-bold">
+                <MapPin className="h-4 w-4" />
+                <span>{t('Open in Google Maps', 'فتح على خرائط جوجل')}</span>
+                <ExternalLink className="h-3.5 w-3.5" />
+              </Button>
+            </a>
           </div>
-        </Reveal>
+
+          <div className="overflow-hidden rounded-3xl border border-teal-200 bg-white shadow-lg">
+            <iframe
+              title={t('DELTACHEM Cairo Head Office Map', 'خريطة المقر الرئيسي لشركة دلتا كيم')}
+              src={SITE_CONFIG.contact.mapsEmbedUrl}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="h-[380px] w-full border-0 sm:h-[440px]"
+              allowFullScreen
+            />
+          </div>
+        </div>
       </SectionShell>
     </>
   );

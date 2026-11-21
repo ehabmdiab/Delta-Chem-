@@ -72,7 +72,7 @@ export async function sendRfqNotification(rfq: RFQ): Promise<SendRfqResult> {
         </p>
       </div>
       <div style="background-color: #f1f5f9; padding: 14px 24px; text-align: center; font-size: 12px; color: #94a3b8; border-top: 1px solid #e2e8f0;">
-        DELTACHEM Company &bull; 66 Gamal El-Deen Zaki st, Gesr El-Suez, Cairo, Egypt &bull; Tel: (202) 26988187
+        DELTACHEM Company &bull; 64 Abdel Aziz Hegazy Street, El Togarieen, Gesr El-Suez, Cairo, Egypt &bull; Tel: 0226988187 / 0226988217
       </div>
     </div>
   `;

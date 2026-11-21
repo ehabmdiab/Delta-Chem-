@@ -268,9 +268,10 @@ export const RequestQuoteClient: React.FC<RequestQuoteClientProps> = ({ products
                   </option>
                   {products.map((p) => {
                     const pName = locale === 'ar' && p.name_ar ? p.name_ar : p.name;
+                    const std = p.pharmacopoeia_standards || p.packaging || '';
                     return (
                       <option key={p.id} value={p.id}>
-                        {pName} ({p.cas_number || 'N/A'})
+                        {std ? `${pName} (${std})` : pName}
                       </option>
                     );
                   })}
@@ -279,12 +280,12 @@ export const RequestQuoteClient: React.FC<RequestQuoteClientProps> = ({ products
 
               <div>
                 <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
-                  {t('Ingredient Name / CAS Number *', 'اسم المادة الخام / رقم CAS *')}
+                  {t('Raw Material Name *', 'اسم المادة الخام *')}
                 </label>
                 <Input
                   placeholder={t(
-                    'e.g. Microcrystalline Cellulose PH 102',
-                    'مثال: سليلوز دقيق التبلور PH 102'
+                    'e.g. Amoxicillin Trihydrate, MCC PH 101',
+                    'مثال: أموكسيسيلين ثلاثي الهيدرات، سليلوز دقيق التبلور'
                   )}
                   error={errors.product_name?.message}
                   {...register('product_name', {

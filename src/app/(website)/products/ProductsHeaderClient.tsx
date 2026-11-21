@@ -7,20 +7,17 @@ export const ProductsHeaderClient: React.FC = () => {
   const { t } = useLanguage();
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 p-8 shadow-xs space-y-3">
-      <div className="inline-block px-2.5 py-1 bg-teal-50 border border-teal-200 text-teal-800 text-xs font-semibold rounded-full uppercase tracking-wider">
-        {t('B2B Commercial Directory', 'دليل التوريد والتعاقدات المؤسسية (B2B)')}
+    <div className="space-y-3 rounded-2xl border border-slate-200 bg-white p-8 shadow-xs sm:p-10">
+      <div className="inline-block rounded-full border border-teal-200 bg-teal-50 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-teal-800">
+        {t('Official Product List', 'قائمة الخامات الرسمية المعتمدة')}
       </div>
-      <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
-        {t(
-          'Pharmaceutical & Life Science Ingredient Catalog',
-          'كتالوج المواد الخام الصيدلانية وعلوم الحياة'
-        )}
+      <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+        {t('Raw Materials Directory', 'دليل الخامات والمواد الفعالة')}
       </h1>
-      <p className="text-sm text-slate-600 max-w-3xl leading-relaxed">
+      <p className="max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">
         {t(
-          'Search, filter, and inspect verified ingredient records. This catalog is structured for formulation scientists, quality departments, and procurement managers in Egypt and the MENA region. Request immediate quotations and batch technical documentation.',
-          'ابحث وقم بتصفية وفحص بيانات وسجلات المواد الخام المعتمدة. تم إعداد هذا الكتالوج لعلماء الصياغة الدوائية، وإدارات توكيد الجودة، ومسؤولي المشتريات بمصر والشرق الأوسط. اطلب عروض أسعار فورية والملفات الفنية المعتمدة للتشغيلات.'
+          'Browse Delta Chem’s verified portfolio across Human, Veterinary, Cosmetics, and Nutraceutical sectors.',
+          'تصفح القائمة الرسمية لخامات دلتا كيم المصنفة عبر القطاعات الأربعة: البشرية، البيطرية، مستحضرات التجميل، والمكملات الغذائية.'
         )}
       </p>
     </div>

@@ -4,16 +4,19 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { motion, MotionConfig, useReducedMotion, useScroll, useSpring } from 'motion/react';
 import { useLanguage } from '@/components/providers/LanguageContext';
+import { SPRING_SNAPPY, CROSSFADE_REDUCED } from '@/lib/motion';
 
-/** Routes where long-form reading / forms make full-screen snapping a poor fit. */
+/** Routes where long-form reading / forms make section rail unnecessary. */
 const SNAP_DISABLED_PREFIXES = ['/products', '/request-a-quote', '/insights/'];
 
 const SECTION_LABEL_MAP: Record<string, string> = {
   Home: 'الرئيسية',
   About: 'عن الشركة',
+  Sectors: 'القطاعات',
   Products: 'المنتجات',
   Featured: 'المميزة',
   'Sourcing Models': 'نماذج التوريد',
+  Warehousing: 'التخزين والمستودعات',
   'Cairo Hub': 'مستودع القاهرة',
   Quality: 'الجودة والرقابة',
   Insights: 'المقالات والأخبار',
@@ -21,23 +24,23 @@ const SECTION_LABEL_MAP: Record<string, string> = {
   Overview: 'نظرة عامة',
   Profile: 'الملف المؤسسي',
   Leadership: 'القيادة التنفيذية',
-  'Harvest Hub': 'مستودع هارفست',
-  Values: 'القيم والالتزام',
-  'Dual Models': 'النماذج التجارية',
-  Services: 'الخدمات',
-  Standards: 'المعايير والرقابة',
-  Documentation: 'الملفات الفنية',
-  Testing: 'الفحص والتحليل',
-  Auditing: 'التدقيق والتأهيل',
-  Warehousing: 'التخزين واللوجستيات',
-  Zones: 'مناطق التخزين',
-  Fleet: 'أسطول التوزيع',
-  SLA: 'مواعيد التسليم',
-  Industries: 'القطاعات',
-  Advantages: 'المزايا الاستراتيجية',
-  Partners: 'الشركاء العالميون',
-  Inquire: 'طلب الاستفسار',
-  Location: 'المقر والعنوان',
+  'Harvest Pharma': 'هارفست فارما',
+  Facilities: 'المخازن الواقعية',
+  'Climate Zones': 'مناطق التخزين',
+  Distribution: 'التوزيع والشحن',
+  Models: 'نماذج العمل',
+  Capabilities: 'القدرات',
+  Governance: 'حوكمة الجودة',
+  Dossiers: 'الملفات الفنية',
+  Protocol: 'إجراءات العمل',
+  Principles: 'مبادئ العمل',
+  'Head Office': 'المقر الرئيسي',
+  Partner: 'الشراكة',
+  Advantages: 'المزايا',
+  Network: 'الشبكة',
+  Criteria: 'المعايير',
+  'Map & Location': 'الموقع على الخريطة',
+  Inquire: 'طلب تسعير',
 };
 
 interface RailItem {
@@ -58,13 +61,6 @@ const labelFor = (el: HTMLElement, index: number): string => {
   return `Section ${index + 1}`;
 };
 
-/**
- * Turns every top-level <section> inside <main> into a full-screen "slide"
- * (Arshine style full-page carousel), and renders:
- *  - a vertical dot rail with labels for jumping between slides
- *  - a thin scroll progress bar
- * Also provides reduced-motion handling for all motion components.
- */
 export const SnapMode: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const pathname = usePathname();
   const { t } = useLanguage();
@@ -75,9 +71,8 @@ export const SnapMode: React.FC<{ children?: React.ReactNode }> = ({ children })
   const [active, setActive] = useState(0);
 
   const { scrollYProgress } = useScroll();
-  const progress = useSpring(scrollYProgress, { stiffness: 140, damping: 30, mass: 0.2 });
+  const progress = useSpring(scrollYProgress, { stiffness: 180, damping: 32, mass: 0.2 });
 
-  // Toggle the snap behaviour on <html> for the lifetime of the page.
   useEffect(() => {
     const root = document.documentElement;
     if (enabled) {
@@ -86,7 +81,6 @@ export const SnapMode: React.FC<{ children?: React.ReactNode }> = ({ children })
     return () => root.classList.remove('snap-root');
   }, [enabled]);
 
-  // Collect sections for the rail + track the active one.
   useEffect(() => {
     if (!enabled) return;
 
@@ -163,47 +157,50 @@ export const SnapMode: React.FC<{ children?: React.ReactNode }> = ({ children })
       {children}
 
       {showRail && (
-        <>
-          {/* Right-hand slide rail with counter */}
-          <nav
-            aria-label={t('Page sections', 'أقسام الصفحة')}
-            className="fixed right-2 top-1/2 z-40 hidden -translate-y-1/2 flex-col items-center gap-1 rounded-full bg-slate-950/75 px-2 py-3.5 shadow-xl backdrop-blur-md sm:flex lg:right-5 rtl:right-auto rtl:left-2 rtl:lg:left-5"
+        <nav
+          aria-label={t('Page sections', 'أقسام الصفحة')}
+          className="fixed right-2 top-1/2 z-40 hidden -translate-y-1/2 flex-col items-center gap-1 rounded-full border border-white/15 bg-slate-950/90 px-2 py-3.5 shadow-xl sm:flex lg:right-5 rtl:left-2 rtl:right-auto rtl:lg:left-5"
+        >
+          <div
+            aria-label={t(`Slide ${active + 1} of ${items.length}`, `شريحة ${active + 1} من ${items.length}`)}
+            className="mb-2 px-1 font-mono text-[10px] font-extrabold text-teal-400"
           >
-            <div
-              aria-label={t(`Slide ${active + 1} of ${items.length}`, `شريحة ${active + 1} من ${items.length}`)}
-              className="mb-2 px-1 font-mono text-[10px] font-extrabold text-teal-400"
-            >
-              <span>{String(active + 1).padStart(2, '0')}</span>
-              <span className="mx-0.5 opacity-40">/</span>
-              <span className="text-white/60">{String(items.length).padStart(2, '0')}</span>
-            </div>
-            {items.map((item, index) => {
-              const isActive = index === active;
-              const localizedLabel = t(item.label, SECTION_LABEL_MAP[item.label] || item.label);
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => goTo(item.id)}
-                  aria-label={localizedLabel}
-                  aria-current={isActive ? 'true' : undefined}
-                  className="group relative flex h-6 w-6 cursor-pointer items-center justify-center"
-                >
-                  <span
-                    className={`block rounded-full transition-all duration-300 ${
-                      isActive
-                        ? 'h-3 w-3 bg-teal-400 ring-2 ring-teal-400/40'
-                        : 'h-2 w-2 bg-white/50 group-hover:bg-white'
-                    }`}
+            <span>{String(active + 1).padStart(2, '0')}</span>
+            <span className="mx-0.5 opacity-40">/</span>
+            <span className="text-white/60">{String(items.length).padStart(2, '0')}</span>
+          </div>
+          {items.map((item, index) => {
+            const isActive = index === active;
+            const localizedLabel = t(item.label, SECTION_LABEL_MAP[item.label] || item.label);
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => goTo(item.id)}
+                aria-label={localizedLabel}
+                aria-current={isActive ? 'true' : undefined}
+                className="group relative flex h-6 w-6 cursor-pointer items-center justify-center active:scale-90"
+              >
+                {isActive && (
+                  <motion.span
+                    layoutId="snap-rail-active"
+                    transition={reduceMotion ? CROSSFADE_REDUCED : SPRING_SNAPPY}
+                    aria-hidden="true"
+                    className="absolute h-4 w-4 rounded-full bg-teal-400/25 ring-1 ring-teal-400/60"
                   />
-                  <span className="pointer-events-none absolute right-8 rtl:right-auto rtl:left-8 whitespace-nowrap rounded-md bg-slate-950/90 px-2.5 py-1 text-xs font-semibold text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100">
-                    {localizedLabel}
-                  </span>
-                </button>
-              );
-            })}
-          </nav>
-        </>
+                )}
+                <span
+                  className={`relative z-10 block rounded-full transition-all duration-200 ${
+                    isActive ? 'h-2.5 w-2.5 bg-teal-400' : 'h-2 w-2 bg-white/50 group-hover:bg-white'
+                  }`}
+                />
+                <span className="pointer-events-none absolute right-8 whitespace-nowrap rounded-md bg-slate-950/90 px-2.5 py-1 text-xs font-semibold text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100 rtl:left-8 rtl:right-auto">
+                  {localizedLabel}
+                </span>
+              </button>
+            );
+          })}
+        </nav>
       )}
     </MotionConfig>
   );

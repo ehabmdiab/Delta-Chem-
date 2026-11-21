@@ -5,7 +5,7 @@ import { Product } from '@/types';
 import { Button } from '@/components/atoms/Button';
 import { RfqModal } from '@/components/molecules/RfqModal';
 import { siteConfig } from '@/config/site';
-import { Phone, FileQuestion } from 'lucide-react';
+import { Phone, FileQuestion, MessageCircle } from 'lucide-react';
 import { useLanguage } from '@/components/providers/LanguageContext';
 
 export const ProductDetailClient: React.FC<{ product: Product }> = ({ product }) => {
@@ -15,45 +15,51 @@ export const ProductDetailClient: React.FC<{ product: Product }> = ({ product })
   const productName = locale === 'ar' && product.name_ar ? product.name_ar : product.name;
 
   return (
-    <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 space-y-4">
+    <div className="space-y-4 rounded-2xl border border-slate-200 bg-slate-50 p-6">
       <div className="space-y-1">
-        <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">
-          {t('Procurement & Pricing', 'التسعير والتوريد المؤسسي')}
+        <span className="block text-xs font-semibold uppercase tracking-wider text-slate-500">
+          {t('Procurement & Quotation', 'التسعير والتوريد')}
         </span>
-        <p className="text-xs text-slate-600">
+        <p className="text-xs leading-relaxed text-slate-600">
           {t(
-            'Inquire for batch specifications, COA verification, and commercial quotations.',
-            'استفسر عن مواصفات التشغيلة، واعتماد شهادات التحليل (COA)، وعروض الأسعار الرسمية.'
+            'Request batch COA, technical specifications, and B2B pricing.',
+            'اطلب شهادة التحليل (COA) والمواصفات الفنية وعرض السعر.'
           )}
         </p>
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-2.5">
         <Button
           variant="teal"
           size="md"
-          className="w-full font-semibold shadow-xs"
+          className="min-h-[44px] w-full font-bold shadow-xs"
           onClick={() => setIsRfqOpen(true)}
-          leftIcon={<FileQuestion className="w-4 h-4 rtl:ml-2 rtl:mr-0" />}
+          leftIcon={<FileQuestion className="h-4 w-4" />}
         >
           {t('Request a Quote (RFQ)', 'طلب عرض أسعار (RFQ)')}
         </Button>
 
         <a
-          href={`tel:${siteConfig.contact.phoneClean}`}
-          className="w-full inline-flex items-center justify-center gap-2 px-3 py-2 text-xs font-semibold rounded-md border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 transition"
+          href={siteConfig.socials.whatsappPrimary}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex min-h-[42px] w-full items-center justify-center gap-2 rounded-lg bg-emerald-600 px-3 py-2 text-xs font-bold text-white transition hover:bg-emerald-500"
         >
-          <Phone className="w-3.5 h-3.5 text-teal-600" />
+          <MessageCircle className="h-4 w-4" />
           <span>
-            {t('Call:', 'اتصال:')} {siteConfig.contact.phone}
+            {t('WhatsApp Sales:', 'واتساب المبيعات:')} {siteConfig.contact.mobiles[0].display}
           </span>
         </a>
-      </div>
 
-      <div className="pt-2 border-t border-slate-200/80 text-[11px] text-slate-500 space-y-1">
-        <p>&bull; {t('Direct commercial inquiries only', 'استفسارات وتعاقدات تجارية مباشرة فقط')}</p>
-        <p>&bull; {t('No minimum cart restriction; B2B orders', 'توريد مباشر لمصانع الأدوية والكيماويات (B2B)')}</p>
-        <p>&bull; {t('Free technical sampling for manufacturers', 'عينات فنية مجانية لمعامل ومصانع الأدوية')}</p>
+        <a
+          href={`tel:${siteConfig.contact.phoneClean}`}
+          className="inline-flex min-h-[42px] w-full items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-50"
+        >
+          <Phone className="h-3.5 w-3.5 text-teal-600" />
+          <span>
+            {t('Landline:', 'الأرضي:')} {siteConfig.contact.phone} / {siteConfig.contact.phoneSecondary}
+          </span>
+        </a>
       </div>
 
       <RfqModal
@@ -62,7 +68,7 @@ export const ProductDetailClient: React.FC<{ product: Product }> = ({ product })
         prefilledProduct={{
           id: product.id,
           name: productName,
-          grade: product.grade_spec,
+          grade: product.pharmacopoeia_standards || product.grade_spec,
         }}
       />
     </div>

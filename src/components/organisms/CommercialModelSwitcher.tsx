@@ -2,11 +2,12 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, useReducedMotion } from 'motion/react';
 import { Button } from '@/components/atoms/Button';
 import { SectionShell } from '@/components/molecules/SectionShell';
 import { SectionHeader } from '@/components/molecules/SectionHeader';
 import { useLanguage } from '@/components/providers/LanguageContext';
+import { SPRING_SMOOTH, SPRING_SNAPPY, CROSSFADE_REDUCED } from '@/lib/motion';
 import { Globe2, Warehouse, CheckCircle2, ArrowRight, Truck } from 'lucide-react';
 
 type ModelKey = 'commission' | 'trade';
@@ -32,262 +33,263 @@ interface ModelContent {
 
 const MODELS: Record<ModelKey, ModelContent> = {
   commission: {
-    audience: 'For Foreign Chemical Manufacturers & Multinationals',
-    audience_ar: 'للمصانع الكيميائية والشركات متعددة الجنسيات',
-    title: 'Authorized Commission Agency & Technical Representation',
-    title_ar: 'وكالة تجارية معتمدة وتمثيل فني مباشر للمصانع',
-    body: 'DELTACHEM acts as your commercial ambassador across Egypt and neighbouring Arab markets — bridging foreign synthesis plants with licensed manufacturers and handling pre-qualification, sample trials and EDA registration.',
-    body_ar: 'تعمل دلتا كيم كسفير تجاري وفني لمصانعكم في مصر والأسواق العربية — حيث نربط بين منشآت التخليق العالمية ومصانع الأدوية المرخصة، وندير التأهيل المسبق وتجارب العينات والتسجيل لدى هيئة الدواء.',
+    audience: 'For International Manufacturers',
+    audience_ar: 'للمصانع والشركات العالمية',
+    title: 'Authorized Commission Agency & Direct Indent',
+    title_ar: 'الوكالة التجارية والاستيراد المباشر',
+    body: 'We represent global raw material producers in Egypt — managing contracting, technical sampling, and EDA registration.',
+    body_ar: 'نمثل كبرى المصانع العالمية في مصر لإدارة التعاقدات المباشرة وتوريد العينات ودعم ملفات هيئة الدواء.',
     points: [
       {
-        title: 'Direct Principal Invoicing',
-        title_ar: 'فواتير مباشرة من المصنع الرئيسي',
-        text: 'Contracts and LCs executed directly between principal and local plant.',
-        text_ar: 'إصدار العقود والاعتمادات المستندية مباشرة بين المصنع والمشتري المحلي.',
+        title: 'Direct Factory Invoicing',
+        title_ar: 'فواتير مباشرة من المصنع',
+        text: 'Contracts and LCs directly between principal and buyer.',
+        text_ar: 'تعاقد واعتماد مستندي مباشر مع المصنع المورد.',
       },
       {
-        title: 'EDA Dossier Coordination',
-        title_ar: 'تنسيق ملفات هيئة الدواء المصرية',
-        text: 'In-house team manages DMF filings and GMP attestation.',
-        text_ar: 'فريق متخصص يقدم ملفات DMF وشهادات GMP والتسجيلات الرسمية.',
+        title: 'Regulatory Dossier Support',
+        title_ar: 'دعم ملفات التسجيل',
+        text: 'DMF, COA, and GMP dossier coordination for EDA.',
+        text_ar: 'توفير ملفات DMF وشهادات GMP لهيئة الدواء.',
       },
       {
-        title: 'Client Technical Sampling',
-        title_ar: 'عينات فنية لمختبرات R&D وQC',
-        text: 'Samples delivered straight to QA/QC and R&D heads in Egypt.',
-        text_ar: 'توصيل عينات التشغيل مباشرة لرؤساء الجودة والبحوث بمصانع الأدوية.',
+        title: 'Technical R&D Samples',
+        title_ar: 'عينات البحث والتطوير',
+        text: 'Trial samples delivered straight to factory QC/R&D.',
+        text_ar: 'توفير عينات التشغيل لمختبرات الجودة والبحث.',
       },
       {
-        title: 'Market Intelligence',
-        title_ar: 'دراسات وتقارير السوق الدوائي',
-        text: 'Quarterly reports, forecasts and tender tracking.',
-        text_ar: 'تقارير دورية وتنبؤات باحتياجات السوق ومتابعة المناقصات الدوائية.',
+        title: 'Market Follow-Up',
+        title_ar: 'متابعة مستمرة للسوق',
+        text: 'Demand forecasting and continuous supply planning.',
+        text_ar: 'تخطيط الاحتياجات الدورية ومتابعة خطط الإنتاج.',
       },
     ],
-    ctaLabel: 'Propose Agency Partnership',
-    ctaLabel_ar: 'طلب شراكة وتمثيل تجاري',
+    ctaLabel: 'Propose Partnership',
+    ctaLabel_ar: 'طلب شراكة تجارية',
     ctaHref: '/contact',
-    linkLabel: 'Review Agency Credentials',
-    linkLabel_ar: 'استعراض اعتمادات الوكالة',
-    linkHref: '/about',
-    sideTitle: 'Commission Model Workflow',
-    sideTitle_ar: 'مراحل عمل الوكالة التجارية',
+    linkLabel: 'View Agency Services',
+    linkLabel_ar: 'استعراض خدمات الوكالة',
+    linkHref: '/services',
+    sideTitle: 'Agency Workflow',
+    sideTitle_ar: 'خطوات الوكالة المباشرة',
     side: [
       {
-        label: 'Agency Agreement',
-        label_ar: 'عقد الوكالة والتمثيل',
-        note: 'Territory authorization & portfolio assignment',
-        note_ar: 'تحديد النطاق الجغرافي وقائمة المنتجات المعتمدة',
+        label: 'Principal Authorization',
+        label_ar: 'توقيع اتفاقية التمثيل',
+        note: 'Portfolio scope & commercial terms',
+        note_ar: 'تحديد الخامات المعتمدة وشروط التعاقد',
       },
       {
-        label: 'Regulatory Dossier Approval',
-        label_ar: 'اعتماد الملف الفني والتسجيل',
-        note: 'DMF submission, EDA evaluation & stability review',
-        note_ar: 'تقديم ملف DMF ودراسات الثبات لدى هيئة الدواء',
+        label: 'Dossier Verification',
+        label_ar: 'اعتماد الملفات الفنية',
+        note: 'DMF & GMP compliance review',
+        note_ar: 'مراجعة ملفات التسجيل وشهادات الجودة',
       },
       {
-        label: 'Customer Qualification & R&D',
-        label_ar: 'تأهيل العينات لدى المصانع',
-        note: 'Batch samples evaluated by Egyptian labs',
-        note_ar: 'فحص عينات التشغيل بالمصانع والمختبرات المحلية',
+        label: 'Factory Sampling',
+        label_ar: 'تأهيل العينات بالمصانع',
+        note: 'QC validation by local plants',
+        note_ar: 'فحص واعتماد العينات بمختبرات العملاء',
       },
       {
-        label: 'Direct Contract Execution',
-        label_ar: 'تنفيذ العقود والشحن المباشر',
-        note: 'Principal paid directly; DELTACHEM earns commission',
-        note_ar: 'دفع مستحقات المصنع مباشرة مع تحصيل عمولة التمثيل',
+        label: 'Direct Shipment',
+        label_ar: 'الشحن والتوريد المباشر',
+        note: 'Maritime & air freight coordination',
+        note_ar: 'تنسيق الشحن الدولي حتى ميناء الوصول',
       },
     ],
   },
   trade: {
-    audience: 'For Egyptian Pharmaceutical & Cosmetics Factories',
-    audience_ar: 'لمصانع الأدوية ومستحضرات التجميل في مصر',
-    title: 'Stock & Trade Distribution (Direct Cairo Hub Inventory)',
-    title_ar: 'التوزيع والتوريد من المخزون المحلي (مستودعات القاهرة)',
-    body: 'DELTACHEM imports high-velocity APIs, excipients and vitamins, handling customs clearance and laboratory release testing. Materials are held in Harvest Pharma’s GDP-compliant Cairo facility for immediate dispatch.',
-    body_ar: 'تستورد دلتا كيم المواد سريعة الاستهلاك من مواد فعالة وسواغات وفيتامينات، مع إنهاء التخليص الجمركي والفحص المعملي. يتم تخزين الخامات بمستودعات هارفست فارما بالقاهرة للتسليم الفوري.',
+    audience: 'For Egyptian Factories',
+    audience_ar: 'لمصانع الأدوية والتجميل في مصر',
+    title: 'Stock & Trade Distribution (Local Inventory)',
+    title_ar: 'التوريد الفوري من المخزون المحلي',
+    body: 'We import high-demand raw materials, clear customs, and stock inventory at Harvest Pharma for fast factory delivery.',
+    body_ar: 'نستورد الخامات الأساسية وننهي الإفراج الجمركي ونحتفظ بمخزون جاهز بمخازن هارفست فارما للتسليم السريع.',
     points: [
       {
-        title: 'Local Currency Invoicing',
-        title_ar: 'فواتير بالعملة المحلية (الجنيه المصري)',
-        text: 'No FX risk or LC delays — billing in EGP.',
-        text_ar: 'دون مخاطر أسعار الصرف أو تأخير الاعتمادات المستندية.',
+        title: 'Local Currency (EGP)',
+        title_ar: 'التعامل بالجنيه المصري',
+        text: 'Tax-compliant invoicing without LC delays.',
+        text_ar: 'فواتير ضريبية محلية دون تعقيدات الاعتمادات.',
       },
       {
-        title: 'Zero Production Downtime',
-        title_ar: 'حماية خطوط الإنتاج من التوقف',
-        text: 'Safety buffer stock for same-day dispatch.',
-        text_ar: 'مخزون أمان استراتيجي جاهز للتسليم في نفس اليوم.',
+        title: 'Immediate Buffer Stock',
+        title_ar: 'مخزون أمان متوفر',
+        text: 'Protects production lines from global shipping delays.',
+        text_ar: 'حماية خطوط الإنتاج من تقلبات الشحن الدولي.',
       },
       {
-        title: '2°C–8°C Cold Chain & Ambient',
-        title_ar: 'تخزين مبرد ٢-٨° مئوية وغرف مكيفة',
-        text: 'Validated rooms with calibrated data loggers.',
-        text_ar: 'غرف معتمدة ومجهزة برواصد بيانات رقمية لمعايرة الحرارة.',
+        title: 'GDP Validated Storage',
+        title_ar: 'تخزين مطابق لمعايير GDP',
+        text: 'Climate-controlled rooms monitored 24/7.',
+        text_ar: 'غرف مراقبة الحرارة والرطوبة على مدار الساعة.',
       },
       {
-        title: 'Cleared Analytical COA',
-        title_ar: 'شهادات تحليل COA معتمدة والإفراج الجمركي',
-        text: 'Every container ships with verified COA and customs release.',
-        text_ar: 'تسليم كل شحنة مع شهادة التحليل الأصلية ومستندات الإفراج.',
+        title: 'Verified Batch COA',
+        title_ar: 'شهادات تحليل معتمدة',
+        text: 'Original batch documentation with every drum.',
+        text_ar: 'تسليم كل شحنة بشهادة التحليل الأصلية.',
       },
     ],
-    ctaLabel: 'View Current In-Stock Inventory',
-    ctaLabel_ar: 'استعراض المخزون المحلي المتوفر',
+    ctaLabel: 'Explore Product List',
+    ctaLabel_ar: 'استعراض قائمة الخامات',
     ctaHref: '/products',
-    linkLabel: 'Inspect Cairo Warehouse',
-    linkLabel_ar: 'مواصفات مستودع القاهرة',
+    linkLabel: 'Inspect Harvest Pharma Hub',
+    linkLabel_ar: 'معاينة مخازن هارفست فارما',
     linkHref: '/supply-chain',
-    sideTitle: 'Trade Model Dispatch SLA',
-    sideTitle_ar: 'مواعيد التسليم للمناطق الصناعية',
+    sideTitle: 'Delivery Coverage',
+    sideTitle_ar: 'مواعيد التوصيل للمناطق الصناعية',
     side: [
       {
         label: '10th of Ramadan City',
-        label_ar: 'مدينة العاشر من رمضان',
+        label_ar: 'العاشر من رمضان',
         note: 'Same-Day / 24h',
-        note_ar: 'نفس اليوم / خلال ٢٤ ساعة',
+        note_ar: 'نفس اليوم / ٢٤ ساعة',
       },
       {
         label: '6th of October City',
-        label_ar: 'مدينة السادس من أكتوبر',
+        label_ar: 'السادس من أكتوبر',
         note: '24h Dispatch',
-        note_ar: 'شحن خلال ٢٤ ساعة',
+        note_ar: 'خلال ٢٤ ساعة',
       },
       {
         label: 'Obour & Badr Cities',
-        label_ar: 'مدينتا العبور وبدر',
+        label_ar: 'العبور وبدر',
         note: 'Same-Day / 12h',
-        note_ar: 'نفس اليوم / خلال ١٢ ساعة',
+        note_ar: 'خلال ١٢ ساعة',
       },
       {
         label: 'Alexandria & Borg El-Arab',
         label_ar: 'الإسكندرية وبرج العرب',
         note: '24h – 48h',
-        note_ar: 'خلال ٢٤ إلى ٤٨ ساعة',
+        note_ar: 'خلال ٢٤ - ٤٨ ساعة',
       },
     ],
   },
 };
 
-/** Slide 5 — dual commercial operating frameworks. */
 export const CommercialModelSwitcher: React.FC = () => {
   const { t } = useLanguage();
+  const reduceMotion = useReducedMotion();
   const [activeModel, setActiveModel] = useState<ModelKey>('commission');
   const model = MODELS[activeModel];
 
   return (
-    <SectionShell label="Sourcing Models" tone="navy" image="/images/bg-molecules.jpg">
-      <div className="space-y-5">
-        <div className="flex flex-col items-start justify-between gap-5 lg:flex-row lg:items-end">
+    <SectionShell label="Sourcing Models" tone="navy" image="/images/deltachem-global-shipping.jpg">
+      <div className="space-y-8">
+        <div className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-end">
           <SectionHeader
             onDark
-            eyebrow={t('Commercial Operating Frameworks', 'نماذج التشغيل التجاري')}
-            title={t('Flexible Sourcing Models for Industry Partners', 'نماذج توريد مرنة لشركاء الصناعة')}
+            eyebrow={t('Supply Architecture', 'نماذج التوريد')}
+            title={t('Flexible Commercial Sourcing Models', 'نماذج توريد مرنة لشركاء الصناعة')}
           />
           <div
             role="tablist"
             aria-label={t('Sourcing model', 'نموذج التوريد')}
-            className="inline-flex w-full flex-col gap-1.5 rounded-2xl border border-white/20 bg-white/10 p-1.5 backdrop-blur sm:w-auto sm:flex-row"
+            className="inline-flex w-full flex-col gap-1.5 rounded-2xl border border-white/20 bg-sky-950/85 p-1.5 shadow-lg sm:w-auto sm:flex-row"
           >
             {(
               [
-                ['commission', Globe2, 'Model 01: Commission Agency', 'النموذج ١: الوكالة التجارية'],
-                ['trade', Warehouse, 'Model 02: Stock & Trade', 'النموذج ٢: المخزون والتجارة'],
+                ['commission', Globe2, '01: Commission Agency', '١: الوكالة التجارية'],
+                ['trade', Warehouse, '02: Local Stock & Trade', '٢: المخزون المحلي'],
               ] as const
-            ).map(([key, Icon, en, ar]) => (
-              <button
-                key={key}
-                type="button"
-                role="tab"
-                aria-selected={activeModel === key}
-                onClick={() => setActiveModel(key)}
-                className={`flex min-h-[44px] cursor-pointer items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold transition-all ${
-                  activeModel === key
-                    ? 'bg-amber-500 text-slate-950 shadow-md'
-                    : 'text-white hover:bg-white/10'
-                }`}
-              >
-                <Icon className="h-4 w-4" />
-                <span>{t(en, ar)}</span>
-              </button>
-            ))}
+            ).map(([key, Icon, en, ar]) => {
+              const isSelected = activeModel === key;
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  role="tab"
+                  aria-selected={isSelected}
+                  onClick={() => setActiveModel(key)}
+                  className={`relative flex min-h-[44px] cursor-pointer items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold transition-colors active:scale-[0.98] ${
+                    isSelected ? 'text-slate-950' : 'text-white hover:bg-white/10'
+                  }`}
+                >
+                  {isSelected && (
+                    <motion.span
+                      layoutId="sourcing-model-pill"
+                      transition={reduceMotion ? CROSSFADE_REDUCED : SPRING_SNAPPY}
+                      aria-hidden="true"
+                      className="absolute inset-0 rounded-xl bg-amber-500 shadow-md"
+                    />
+                  )}
+                  <Icon className="relative z-10 h-4 w-4" />
+                  <span className="relative z-10">{t(en, ar)}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeModel}
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.28 }}
-            className="grid grid-cols-1 items-stretch gap-5 lg:grid-cols-12"
-          >
-            <div className="space-y-3.5 rounded-3xl bg-white p-5 text-slate-900 shadow-2xl sm:p-6 lg:col-span-7">
-              <span className="inline-block rounded-md border border-teal-200 bg-teal-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-teal-700">
-                {t(model.audience, model.audience_ar)}
-              </span>
-              <h3 className="text-xl font-extrabold leading-tight tracking-tight sm:text-2xl lg:text-3xl">
-                {t(model.title, model.title_ar)}
-              </h3>
-              <p className="text-sm leading-relaxed text-slate-600 lg:text-base">
-                {t(model.body, model.body_ar)}
-              </p>
-              <ul className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-                {model.points.map((p) => (
-                  <li key={p.title} className="flex items-start gap-2">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-teal-600" aria-hidden="true" />
-                    <span>
-                      <strong className="block text-sm font-bold text-slate-900">
-                        {t(p.title, p.title_ar)}
-                      </strong>
-                      <span className="text-xs text-slate-600 sm:text-sm">
-                        {t(p.text, p.text_ar)}
-                      </span>
-                    </span>
-                  </li>
-                ))}
-              </ul>
-              <div className="flex flex-wrap items-center gap-4 pt-1">
-                <Link href={model.ctaHref}>
-                  <Button variant="teal" size="md" className="font-bold">
-                    <span>{t(model.ctaLabel, model.ctaLabel_ar)}</span>
-                    <ArrowRight className="h-4 w-4 rtl:rotate-180" />
-                  </Button>
-                </Link>
-                <Link href={model.linkHref} className="text-sm font-bold text-teal-700 hover:underline">
-                  {t(model.linkLabel, model.linkLabel_ar)} &rarr;
-                </Link>
-              </div>
+        {/* Interruptible switch without wait lock */}
+        <motion.div
+          key={activeModel}
+          initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={reduceMotion ? CROSSFADE_REDUCED : SPRING_SMOOTH}
+          className="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-12"
+        >
+          <div className="space-y-5 rounded-3xl bg-white p-6 text-slate-900 shadow-2xl sm:p-8 lg:col-span-7">
+            <span className="inline-block rounded-md border border-teal-200 bg-teal-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-teal-700 rtl:normal-case rtl:tracking-normal">
+              {t(model.audience, model.audience_ar)}
+            </span>
+            <h3 className="text-xl font-extrabold leading-tight sm:text-2xl">
+              {t(model.title, model.title_ar)}
+            </h3>
+            <p className="text-sm leading-relaxed text-slate-600 sm:text-base">
+              {t(model.body, model.body_ar)}
+            </p>
+            <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {model.points.map((p) => (
+                <li key={p.title} className="flex items-start gap-2.5">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-teal-600" aria-hidden="true" />
+                  <span>
+                    <strong className="block text-sm font-bold text-slate-900">
+                      {t(p.title, p.title_ar)}
+                    </strong>
+                    <span className="text-xs text-slate-600">{t(p.text, p.text_ar)}</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <div className="flex flex-wrap items-center gap-4 pt-2">
+              <Link href={model.ctaHref}>
+                <Button variant="teal" size="md" className="font-bold">
+                  <span>{t(model.ctaLabel, model.ctaLabel_ar)}</span>
+                  <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+                </Button>
+              </Link>
+              <Link href={model.linkHref} className="text-sm font-bold text-teal-700 hover:underline">
+                {t(model.linkLabel, model.linkLabel_ar)} →
+              </Link>
             </div>
+          </div>
 
-            <div className="rounded-3xl border border-white/20 bg-white/10 p-5 text-white backdrop-blur-md sm:p-6 lg:col-span-5">
-              <span className="text-xs font-extrabold uppercase tracking-[0.2em] text-amber-400">
-                {t(model.sideTitle, model.sideTitle_ar)}
-              </span>
-              <ol className="mt-4 space-y-2.5">
-                {model.side.map((item, idx) => (
-                  <li
-                    key={item.label}
-                    className="flex items-center gap-3 rounded-xl border border-white/15 bg-sky-950/50 p-3.5"
-                  >
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-teal-400 text-sm font-extrabold text-teal-950">
-                      {activeModel === 'trade' ? <Truck className="h-4 w-4" aria-hidden="true" /> : idx + 1}
-                    </span>
-                    <span className="min-w-0">
-                      <span className="block text-sm font-bold">
-                        {t(item.label, item.label_ar)}
-                      </span>
-                      <span className="block text-sm text-slate-300">
-                        {t(item.note, item.note_ar)}
-                      </span>
-                    </span>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          </motion.div>
-        </AnimatePresence>
+          <div className="rounded-3xl border border-white/15 bg-sky-950/80 p-6 text-white shadow-xl sm:p-8 lg:col-span-5">
+            <span className="text-xs font-extrabold uppercase tracking-[0.18em] text-amber-400 rtl:normal-case rtl:tracking-normal">
+              {t(model.sideTitle, model.sideTitle_ar)}
+            </span>
+            <ol className="mt-5 space-y-3">
+              {model.side.map((item, idx) => (
+                <li
+                  key={item.label}
+                  className="flex items-center gap-3 rounded-xl border border-white/15 bg-sky-950/55 p-3.5"
+                >
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-teal-400 text-sm font-extrabold text-teal-950">
+                    {activeModel === 'trade' ? <Truck className="h-4 w-4" aria-hidden="true" /> : idx + 1}
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-sm font-bold">{t(item.label, item.label_ar)}</span>
+                    <span className="block text-xs text-slate-300">{t(item.note, item.note_ar)}</span>
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </motion.div>
       </div>
     </SectionShell>
   );

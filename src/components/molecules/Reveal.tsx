@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'motion/react';
+import { motion, useReducedMotion } from 'motion/react';
+import { SPRING_SMOOTH, CROSSFADE_REDUCED } from '@/lib/motion';
 
 interface RevealProps {
   children: React.ReactNode;
@@ -11,15 +12,39 @@ interface RevealProps {
   className?: string;
 }
 
-/** Fade + slide entrance triggered the first time the block scrolls into view. */
-export const Reveal: React.FC<RevealProps> = ({ children, delay = 0, y = 28, x = 0, className }) => (
-  <motion.div
-    initial={{ opacity: 0, y, x }}
-    whileInView={{ opacity: 1, y: 0, x: 0 }}
-    viewport={{ once: true, amount: 0.15 }}
-    transition={{ duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] }}
-    className={className}
-  >
-    {children}
-  </motion.div>
-);
+/** Restrained Apple spring entrance; cross-fades cleanly under prefers-reduced-motion. */
+export const Reveal: React.FC<RevealProps> = ({
+  children,
+  delay = 0,
+  y = 14,
+  x = 0,
+  className,
+}) => {
+  const reduceMotion = useReducedMotion();
+
+  if (reduceMotion) {
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true, amount: 0.12 }}
+        transition={{ ...CROSSFADE_REDUCED, delay }}
+        className={className}
+      >
+        {children}
+      </motion.div>
+    );
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y, x }}
+      whileInView={{ opacity: 1, y: 0, x: 0 }}
+      viewport={{ once: true, amount: 0.12 }}
+      transition={{ ...SPRING_SMOOTH, delay }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+};

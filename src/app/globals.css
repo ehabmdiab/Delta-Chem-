@@ -1,23 +1,11 @@
 @import "tailwindcss";
 
 /*
- * DELTACHEM design system
- * -----------------------------------------------------------------------
- * Palette is blended from the two reference sites:
- *   - arshinepharma.com : forest #126537, lime #90C31F, orange #FF6600, charcoal #3E424C
- *   - deltachem.com.eg  : green #018F47, lime tint #F5FBEC, navy #2E4B83, deep navy #102039
- *
- * Rather than rewriting every component, the Tailwind hue ramps used across the
- * codebase are remapped to semantic brand ramps so every page updates together:
- *   teal    -> brand green  (lime 400 -> green 500 -> forest 700-950)
- *   slate   -> forest-tinted neutrals (light surfaces + deep forest darks)
- *   sky / blue / indigo -> navy secondary
- *   emerald -> lime-green (success / live states)
- *   amber / rose-ish -> ember orange (Arshine highlight)
+ * DELTACHEM design system + Apple Fluid Design refinements
  */
 
 :root {
-  --header-h: 72px;
+  --header-h: 76px;
   --background: #ffffff;
   --foreground: #0f1f18;
 }
@@ -25,19 +13,19 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-body), system-ui, sans-serif;
-  --font-display: var(--font-heading), var(--font-body), system-ui, sans-serif;
+  --font-sans: var(--font-latin), var(--font-arabic), system-ui, sans-serif;
+  --font-display: var(--font-latin), var(--font-arabic), system-ui, sans-serif;
 }
 
 @theme {
-  /* Wider desktop container (matches the large Arshine layout) */
-  --container-7xl: 107.5rem;
+  /* Container width */
+  --container-7xl: 90rem;
 
-  /* Larger base type scale - fixes the "small text" complaint site-wide */
+  /* Readable rem-based type scale */
   --text-xs: 0.8125rem;
-  --text-xs--line-height: 1.25rem;
+  --text-xs--line-height: 1.45;
   --text-sm: 0.9375rem;
-  --text-sm--line-height: 1.5rem;
+  --text-sm--line-height: 1.6;
 
   /* Brand green: lime -> green -> forest */
   --color-teal-50: #f5fbec;
@@ -113,7 +101,7 @@
   --color-emerald-900: #324a13;
   --color-emerald-950: #1a2a06;
 
-  /* Ember orange (Arshine highlight) */
+  /* Ember orange highlight */
   --color-amber-50: #fff4eb;
   --color-amber-100: #ffe5d1;
   --color-amber-200: #ffcba3;
@@ -132,8 +120,7 @@
 }
 
 html {
-  /* 16px on laptops, scaling to ~18px on large desktops */
-  font-size: clamp(16px, 0.5vw + 8.5px, 19px);
+  font-size: 100%;
   -webkit-text-size-adjust: 100%;
 }
 
@@ -141,19 +128,66 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
-  line-height: 1.6;
+  line-height: 1.65;
+  letter-spacing: 0;
+  overflow-wrap: break-word;
+  text-align: start;
 }
 
+[dir='rtl'] body,
+.font-arabic {
+  font-family: var(--font-arabic), var(--font-latin), system-ui, sans-serif;
+  line-height: 1.75;
+  letter-spacing: 0;
+}
+
+/* Size-specific optical sizing & tracking (tight on LTR display headings, natural 0 on RTL) */
 h1,
 h2,
 h3,
 h4 {
   font-family: var(--font-display);
+  font-optical-sizing: auto;
   text-wrap: balance;
 }
 
+h1 {
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+}
+
+h2 {
+  letter-spacing: -0.018em;
+  line-height: 1.15;
+}
+
+[dir='rtl'] h1,
+[dir='rtl'] h2,
+[dir='rtl'] h3,
+[dir='rtl'] h4 {
+  letter-spacing: 0;
+  line-height: 1.25;
+}
+
+p {
+  text-wrap: pretty;
+}
+
 /* ---------------------------------------------------------------------
- * Utilities
+ * Native <dialog> Scroll Containment & Backdrop
+ * ------------------------------------------------------------------- */
+dialog:modal {
+  overscroll-behavior: contain;
+}
+
+dialog::backdrop {
+  overflow: hidden;
+  overscroll-behavior: contain;
+  background: rgba(7, 21, 15, 0.56);
+}
+
+/* ---------------------------------------------------------------------
+ * Utilities & Accessible Focus Rings
  * ------------------------------------------------------------------- */
 .scrollbar-none {
   scrollbar-width: none;
@@ -162,67 +196,41 @@ h4 {
   display: none;
 }
 
-:focus-visible {
-  outline: 2px solid var(--color-teal-400);
-  outline-offset: 2px;
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid #0b7a3b;
+  outline-offset: 3px;
+}
+
+.bg-slate-950 :where(a, button):focus-visible,
+.bg-teal-950 :where(a, button):focus-visible,
+.bg-teal-900 :where(a, button):focus-visible,
+.bg-sky-950 :where(a, button):focus-visible {
+  outline-color: #90c31f;
 }
 
 /* ---------------------------------------------------------------------
- * Full-page section carousel (Arshine style)
- * Enabled by <SnapMode /> which toggles `snap-root` on <html>.
- * Each top-level <section> inside <main> becomes one full screen "slide".
+ * Clean scroll behavior
  * ------------------------------------------------------------------- */
 html.snap-root {
-  scroll-snap-type: y proximity;
   scroll-padding-top: var(--header-h);
 }
 
-@media (min-width: 1024px) and (min-height: 600px) {
-  html.snap-root {
-    scroll-snap-type: y proximity;
-  }
-}
-
 html.snap-root main section[data-snap] {
-  scroll-snap-align: start end;
-  scroll-snap-stop: normal;
   scroll-margin-top: var(--header-h);
-  min-height: calc(100dvh - var(--header-h));
-  display: flex;
-  flex-direction: column;
 }
 
-/* Legacy pages: any plain <section> becomes a slide too */
-html.snap-root main section:not([data-snap]) {
-  scroll-snap-align: start end;
-  scroll-snap-stop: normal;
-  scroll-margin-top: var(--header-h);
-  min-height: calc(100dvh - var(--header-h));
-  display: flex;
-  flex-direction: column;
-}
-
-html.snap-root main section > :not([class*="absolute"]):not([class*="fixed"]) {
-  width: 100%;
-}
-
-/* Top bar + footer are snap stops as well so the page can fully scroll */
-.snap-top {
-  scroll-snap-align: start;
-}
-.snap-bottom {
-  scroll-snap-align: end;
-}
-
+/* ---------------------------------------------------------------------
+ * Accessibility Media Queries (Motion, Contrast)
+ * ------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   html {
-    scroll-behavior: auto !important;
+    scroll-behavior: auto;
   }
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+}
+
+@media (prefers-contrast: more) {
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 3px solid currentColor;
+    outline-offset: 3px;
   }
 }

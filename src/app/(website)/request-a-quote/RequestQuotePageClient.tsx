@@ -1,14 +1,10 @@
 'use client';
 
 import React, { Suspense } from 'react';
-import {
-  FileText,
-  Clock,
-  ShieldCheck,
-  Warehouse,
-} from 'lucide-react';
+import { FileText, Clock, ShieldCheck, Warehouse, MessageCircle } from 'lucide-react';
 import { Container } from '@/components/atoms/Container';
 import { Badge } from '@/components/atoms/Badge';
+import { siteConfig } from '@/config/site';
 import { useLanguage } from '@/components/providers/LanguageContext';
 import { RequestQuoteClient } from './RequestQuoteClient';
 import { Product } from '@/types';
@@ -21,21 +17,21 @@ export const RequestQuotePageClient: React.FC<RequestQuotePageClientProps> = ({ 
   const { t } = useLanguage();
 
   return (
-    <div className="bg-slate-50 min-h-screen">
+    <div className="min-h-screen bg-slate-50">
       {/* Header Banner */}
       <section className="bg-gradient-to-b from-slate-900 via-slate-900 to-slate-800 py-16 text-white">
         <Container>
           <div className="mx-auto max-w-3xl text-center">
             <Badge variant="info" className="mb-4">
-              {t('Commercial Quotation System', 'منظومة التسعير التجاري الرسمية')}
+              {t('Commercial Quotation System', 'منظومة التسعير التجاري')}
             </Badge>
-            <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl text-white">
-              {t('Request for Quote (RFQ)', 'طلب عرض أسعار رسمي (RFQ)')}
+            <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl">
+              {t('Request for Quote (RFQ)', 'طلب عرض أسعار (RFQ)')}
             </h1>
             <p className="mt-4 text-base leading-relaxed text-slate-300">
               {t(
-                'Submit your formulation volumes, pharmacopoeial grades, and delivery terms. Our technical commercial desk provides comprehensive pricing within one business day.',
-                'أرسل كميات الإنتاج المطلوبة، ومواصفات دساتير الأدوية، وشروط التسليم. يقدم مكتب المبيعات الفنية والتسعير عروض أسعار شاملة خلال يوم عمل واحد.'
+                'Submit your product requirements, pharmacopoeial grade, and volume for a prompt quotation.',
+                'أرسل اسم الخامة والكمية والمواصفة المطلوبة للحصول على عرض سعر سريع.'
               )}
             </p>
           </div>
@@ -45,8 +41,7 @@ export const RequestQuotePageClient: React.FC<RequestQuotePageClientProps> = ({ 
       {/* Form & Assurance Section */}
       <section className="py-16">
         <Container>
-          <div className="grid gap-12 lg:grid-cols-12 lg:items-start">
-            {/* Left Column: Form */}
+          <div className="grid gap-10 lg:grid-cols-12 lg:items-start">
             <div className="lg:col-span-8">
               <Suspense
                 fallback={
@@ -59,84 +54,69 @@ export const RequestQuotePageClient: React.FC<RequestQuotePageClientProps> = ({ 
               </Suspense>
             </div>
 
-            {/* Right Column: Why Quote with DELTACHEM */}
-            <div className="lg:col-span-4 space-y-6">
-              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                <h3 className="text-base font-bold text-slate-900 mb-4">
-                  {t('Quotation & SLA Guarantee', 'ضمانات التسعير وسرعة الاستجابة')}
+            <div className="space-y-6 lg:col-span-4">
+              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
+                <h3 className="mb-4 text-base font-bold text-slate-900">
+                  {t('Quotation Guarantees', 'ضمانات التسعير')}
                 </h3>
                 <div className="space-y-4 text-xs text-slate-600">
                   <div className="flex items-start gap-3">
-                    <Clock className="h-4 w-4 text-teal-600 shrink-0 mt-0.5" />
+                    <Clock className="mt-0.5 h-4 w-4 shrink-0 text-teal-600" />
                     <div>
-                      <strong className="text-slate-900 block">
-                        {t('24-Hour SLA', 'استجابة خلال 24 ساعة')}
-                      </strong>
-                      {t(
-                        'Verified pricing and current stock confirmation provided within one business day.',
-                        'أسعار موثوقة وتأكيد فوري للكميات المتوفرة بالمخزون خلال يوم عمل واحد.'
-                      )}
+                      <strong className="block text-slate-900">{t('Fast Response', 'استجابة سريعة')}</strong>
+                      {t('Pricing & availability within one business day.', 'أسعار مؤكدة خلال يوم عمل واحد.')}
                     </div>
                   </div>
-
                   <div className="flex items-start gap-3">
-                    <FileText className="h-4 w-4 text-teal-600 shrink-0 mt-0.5" />
+                    <FileText className="mt-0.5 h-4 w-4 shrink-0 text-teal-600" />
                     <div>
-                      <strong className="text-slate-900 block">
-                        {t('Lot COA Included', 'إرفاق شهادة التحليل (COA)')}
-                      </strong>
-                      {t(
-                        'Initial quotes include sample Certificates of Analysis and manufacturer accreditations.',
-                        'تشمل العروض المبدئية نماذج شهادات التحليل المخبري واعتمادات المصنعين.'
-                      )}
+                      <strong className="block text-slate-900">{t('COA & Dossiers', 'شهادات التحليل')}</strong>
+                      {t('Batch COAs and technical files included.', 'مرفق شهادات التحليل والملفات الفنية.')}
                     </div>
                   </div>
-
                   <div className="flex items-start gap-3">
-                    <Warehouse className="h-4 w-4 text-teal-600 shrink-0 mt-0.5" />
+                    <Warehouse className="mt-0.5 h-4 w-4 shrink-0 text-teal-600" />
                     <div>
-                      <strong className="text-slate-900 block">
-                        {t('Local Holding Option', 'خيار التخزين المحلي')}
-                      </strong>
-                      {t(
-                        'Quotes can be structured with buffer storage at Harvest Pharma Cairo warehouse.',
-                        'إمكانية هيكلة عروض الأسعار مع اتفاقيات حجز مخزون أمان بمستودعات هارفست فارما بالقاهرة.'
-                      )}
+                      <strong className="block text-slate-900">{t('Harvest Pharma Stock', 'مخازن هارفست فارما')}</strong>
+                      {t('Local holding and dispatch options.', 'إمكانية التخزين المحلي والتسليم الفوري.')}
                     </div>
                   </div>
-
                   <div className="flex items-start gap-3">
-                    <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
                     <div>
-                      <strong className="text-slate-900 block">
-                        {t('Regulatory Protection', 'الحماية والتوافق الرقابي')}
-                      </strong>
-                      {t(
-                        'EDA registration dossier compatibility verified by our regulatory department.',
-                        'مراجعة وتأكيد توافق ملف التسجيل مع اشتراطات هيئة الدواء المصرية.'
-                      )}
+                      <strong className="block text-slate-900">{t('EDA Ready', 'جاهز لهيئة الدواء')}</strong>
+                      {t('Verified compliance for registration.', 'توافق كامل مع متطلبات التسجيل.')}
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Direct Telephone Support */}
-              <div className="rounded-2xl border border-teal-200 bg-teal-50/50 p-6">
+              {/* Direct Contact */}
+              <div className="space-y-3 rounded-2xl border border-teal-200 bg-teal-50/70 p-6">
                 <h4 className="text-sm font-bold text-teal-950">
-                  {t('Urgent Formulation Batch?', 'هل لديك تشغيلة إنتاج عاجلة؟')}
+                  {t('Direct Sales Contact', 'التواصل المباشر مع المبيعات')}
                 </h4>
-                <p className="mt-1 text-xs text-teal-800 leading-relaxed">
-                  {t(
-                    'For emergency production runs requiring same-day dispatch from our Cairo warehouse, contact our commercial desk directly:',
-                    'لتشغيلات الإنتاج الطارئة التي تتطلب تسليماً في نفس اليوم من مستودع القاهرة، تواصل مباشرة مع مكتب المبيعات:'
-                  )}
+                <p className="font-mono text-sm font-bold text-teal-900">
+                  {t('Tel:', 'أرضي:')} {siteConfig.contact.phone} / {siteConfig.contact.phoneSecondary}
                 </p>
-                <p className="mt-3 font-mono font-bold text-teal-900 text-sm">
-                  {t('Tel: (202) 26988187', 'هاتف: 26988187 (02)')}
-                </p>
-                <p className="text-xs text-teal-700 mt-1">
-                  Email: sales@deltachem.com.eg
-                </p>
+                <div className="space-y-2 pt-1">
+                  {siteConfig.contact.mobiles.map((mob) => (
+                    <a
+                      key={mob.display}
+                      href={mob.whatsapp}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-between rounded-xl bg-emerald-600 px-3.5 py-2 font-mono text-xs font-bold text-white transition hover:bg-emerald-500"
+                    >
+                      <span className="flex items-center gap-1.5">
+                        <MessageCircle className="h-4 w-4" />
+                        <span>{t('WhatsApp:', 'واتساب:')} {mob.display}</span>
+                      </span>
+                      <span>→</span>
+                    </a>
+                  ))}
+                </div>
+                <p className="text-xs text-teal-800">{siteConfig.contact.salesEmail}</p>
               </div>
             </div>
           </div>

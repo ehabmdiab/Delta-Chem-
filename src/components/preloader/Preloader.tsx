@@ -24,8 +24,8 @@ import './preloader.css';
 
 const COLUMNS = [0, 1, 2, 3, 4] as const;
 const LOGO_SRC = '/images/logo-delta-chem.png';
-const LOGO_WIDTH = 1224;
-const LOGO_HEIGHT = 543;
+const LOGO_WIDTH = 932;
+const LOGO_HEIGHT = 531;
 
 const noopSubscribe = () => () => {};
 
@@ -238,9 +238,9 @@ export function Preloader() {
 
         <div className="dc-pre__hud dc-pre__hud--tl">
           <span className="dc-pre__pulse" />
-          Delta Chem · Life Science
+          Delta Chem · Cairo, Egypt
         </div>
-        <div className="dc-pre__hud dc-pre__hud--tr">Cairo, EG · 30.04°N 31.24°E</div>
+        <div className="dc-pre__hud dc-pre__hud--tr">From Quality to Excellence</div>
 
         <div className="dc-pre__center">
           <div className="dc-pre__core">
@@ -306,7 +306,7 @@ export function Preloader() {
               </div>
             </div>
 
-            <p className="dc-pre__tag">Pharmaceutical · Nutraceutical · Veterinary · Cosmetic</p>
+            <p className="dc-pre__tag">Human · Veterinary · Cosmetics · Nutraceuticals</p>
           </div>
         </div>
 

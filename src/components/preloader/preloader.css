@@ -216,39 +216,31 @@ html.dc-pre-lock body {
  */
 .dc-pre__logo {
   position: relative;
-  width: 92%;
-  aspect-ratio: 885 / 457;
+  width: 82%;
+  aspect-ratio: 932 / 531;
   opacity: 0;
-}
-
-/* Soft light plate so the green artwork keeps contrast on the dark stage. */
-.dc-pre__logo::before {
-  content: '';
-  position: absolute;
-  inset: -22% -12%;
-  background: radial-gradient(ellipse at center, rgba(245, 251, 236, 0.16) 0%, transparent 68%);
-  pointer-events: none;
+  padding: 1rem 1.35rem;
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.35), 0 0 32px rgba(144, 195, 31, 0.25);
 }
 
 .dc-pre__logo-img {
   position: absolute;
-  width: 138.3%;
-  max-width: none;
-  height: auto;
-  left: -19.1%;
-  top: -7.9%;
+  inset: 1rem 1.35rem;
+  width: calc(100% - 2.7rem);
+  height: calc(100% - 2rem);
+  object-fit: contain;
   pointer-events: none;
 }
 
 .dc-pre__logo-ghost {
-  filter: brightness(0) invert(1);
-  opacity: 0.1;
+  filter: grayscale(1);
+  opacity: 0.14;
 }
 
 .dc-pre__logo-fill {
-  filter: saturate(1.2) drop-shadow(0 0 22px rgba(144, 195, 31, 0.4));
-  /* Artwork spans ~12%-88% of the image width; map progress onto that range. */
-  clip-path: inset(0 calc(100% - (12% + var(--p) * 0.76%)) 0 0);
+  clip-path: inset(0 calc(100% - var(--p) * 1%) 0 0);
 }
 
 .dc-pre__logo-flash {
@@ -258,12 +250,12 @@ html.dc-pre-lock body {
 
 .dc-pre__scan {
   position: absolute;
-  top: -12%;
-  bottom: -12%;
+  top: 0.5rem;
+  bottom: 0.5rem;
   width: 2px;
-  left: calc(-2.5% + var(--p) * 1.051%);
-  background: linear-gradient(180deg, transparent, #f5fbec 20%, #90c31f 80%, transparent);
-  box-shadow: 0 0 18px 3px rgba(144, 195, 31, 0.85);
+  left: calc(var(--p) * 1%);
+  background: linear-gradient(180deg, transparent, #018f47 20%, #90c31f 80%, transparent);
+  box-shadow: 0 0 14px 2px rgba(144, 195, 31, 0.75);
   pointer-events: none;
 }
 
